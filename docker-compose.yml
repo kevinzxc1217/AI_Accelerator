@@ -1,0 +1,19 @@
+version: "3"
+
+services: 
+    playlab-project:
+        container_name: playlab-project
+        build: ./Docker
+        volumes: 
+            - ./ProjectFiles:/ProjectFiles
+        expose: 
+            - 8080
+
+    nginx:
+        container_name: playlab-nginx
+        image: nginx:1.21.0
+        restart: always
+        volumes: 
+            - ./Docker/nginx.conf:/etc/nginx/conf.d/default.conf
+        ports: 
+            - 8080:80
