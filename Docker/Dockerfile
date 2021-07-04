@@ -6,7 +6,7 @@ ADD . /Docker
 
 # Install python 3.8
 RUN apt-get update -y && \
-    apt-get install -y python3.8 python3-pip
+    apt-get install -y python3.8 python3-pip vim git  
 
 # Change time zone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata

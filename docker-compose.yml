@@ -2,15 +2,15 @@ version: "3"
 
 services: 
     playlab-project:
-        container_name: playlab-project
+        container_name: playlab-$PROJECT
         build: ./Docker
         volumes: 
-            - ./ProjectFiles:/ProjectFiles
+            - ./$PROJECT:/$PROJECT
         expose: 
             - 8080
 
     nginx:
-        container_name: playlab-nginx
+        container_name: playlab-nginx-$PROJECT
         image: nginx:1.21.0
         restart: always
         volumes: 

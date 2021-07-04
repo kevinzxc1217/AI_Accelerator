@@ -5,7 +5,7 @@ echo "export PATH=$ngrok/bin:$ngrok/jre/bin:$PATH" >> ~/.bashrc
 source ~/.bashrc
 
 # Move to /ProjectFiles
-cd /ProjectFiles
+cd /$PROJECT
 
 # Run Flask server with uWSGI
 uwsgi /Docker/uWSGI.ini
