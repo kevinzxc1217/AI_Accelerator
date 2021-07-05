@@ -1,11 +1,13 @@
-# Set $ngrok as an environment variable
-echo "export ngrok=/Docker/ngrok" >> ~/.bashrc
-echo "export CLASSPATH=.:$ngrok/lib:$ngrok/jre/lib:$CLASSPATH" >> ~/.bashrc
-echo "export PATH=$ngrok/bin:$ngrok/jre/bin:$PATH" >> ~/.bashrc
-source ~/.bashrc
+#!/bin/bash
 
-# Move to /ProjectFiles
-cd /$PROJECT
+source /Docker/env_setup.sh
 
-# Run Flask server with uWSGI
-uwsgi /Docker/uWSGI.ini
+# Setup personal repo 
+git config --global user.name $GIT_NAME
+git config --global user.email $GIT_EMAIL
+
+cp /Docker/ngrok /bin/
+
+if [ $RUN_FLASK == true ]; then
+    uwsgi /Docker/uWSGI.ini &
+fi

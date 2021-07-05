@@ -1,14 +1,23 @@
-#!/bin/bash -x
+#!/bin/bash
 
-source env_setup.sh
+source "$PWD"/env_setup.sh
+
+cp env_setup.sh "$PWD"/Docker/env_setup.sh
 
 # build docker image
-tag=$(echo "playlab-$PROJECT" | tr '[:upper:]' '[:lower:]')
+tag=$(echo "playlab-projects" | tr '[:upper:]' '[:lower:]')
 echo tag: $tag
-if [[ "$(docker images -q $tag 2>dev/null)" == "" ]]; then
-  docker build -t $tag ./Docker
+if [[ "$(docker images -q $tag > /dev/null 2>&1)" == "" ]]; then
+    docker build -t $tag ./Docker
 fi
 
-#run a docker containe
-docker run -p 8080:8080 -v $PWD/${PROJECT}:/$PROJECT -it $tag /bin/bash 
+# $OSTYPE
+#   windows => msys
+#   mac => darwin
 
+# run a docker container
+if [ $OSTYPE == "msys" ]; then
+    winpty docker run -v "$PWD"/projects:/projects -p 8080:8080 -it $tag bash
+else
+    docker run -v "$PWD"/projects:/projects -p 8080:8080 -it $tag bash
+fi

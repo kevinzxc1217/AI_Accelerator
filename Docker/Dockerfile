@@ -1,12 +1,12 @@
 FROM ubuntu:20.04
 
-WORKDIR /Docker
-
 ADD . /Docker
+
+WORKDIR /projects
 
 # Install python 3.8
 RUN apt-get update -y && \
-    apt-get install -y python3.8 python3-pip vim git  
+    apt-get install -y python3.8 python3-pip vim git nano dos2unix
 
 # Change time zone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
@@ -19,7 +19,13 @@ RUN TZ=Asia/Taipei \
 RUN pip3 install --upgrade pip
 
 # Install required python modules
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r /Docker/requirements.txt
+
+# Convert CRLF to LF
+RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
+RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
+
+RUN /Docker/start.sh
 
 # Execute /Docker/start.sh
-CMD ["bash", "start.sh"]
+# ENTRYPOINT ["/Docker/start.sh"]

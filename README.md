@@ -3,18 +3,18 @@
 ## 檔案架構
 ```
 Dokcer Env for LABs
+    ├── env_setup
     ├── run.sh
     ├── docker-compose.yml
-    ├── Docker
-    │   ├── Dockerfile
-    │   ├── requirements.txt
-    │   ├── uWSGI.ini
-    │   ├── nginx.conf
-    │   ├── ngrok
-    │   └── start.sh
-    └── ProjectFiles
-        └── server.py
+    └── Docker
+        ├── Dockerfile
+        ├── requirements.txt
+        ├── uWSGI.ini
+        ├── nginx.conf
+        ├── ngrok
+        └── start.sh
 ```
+
 
 ## Shell Script `run.sh`
 - 依需求修改 repo 的連結（第 1 行）及 repo 的名稱（第 2、3 行）
