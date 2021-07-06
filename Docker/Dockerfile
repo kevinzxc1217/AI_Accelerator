@@ -2,7 +2,10 @@ FROM ubuntu:20.04
 
 ADD . /Docker
 
-WORKDIR /projects
+WORKDIR /workspace
+
+RUN mkdir /workspace/projects
+RUN mkdir /workspace/www
 
 # Install python 3.8
 RUN apt-get update -y && \
