@@ -5,6 +5,7 @@
 PlayLab Docker Base
     ├── env_setup.sh            # environment variables
     ├── run.sh                  # environment setup script
+    ├── run-docker.sh           # docker run script without nginx
     ├── Docker/
     │   ├── docker-compose.yml
     │   ├── Dockerfile
@@ -38,7 +39,7 @@ GITLAB_LOGIN=<your playlab gitlab login name>
 # project parameters, must be consistent with gitlab URLs
 COURSE="aica-spring-2020"
 PROJECT="aica_lab4,aica_lab5"       # ALL projects without flask
-RUN_FLASK=false                     # start docker env with nginx proxy or not
+RUN_FLASK=false                     # start docker env with / without uWSGI and nginx proxy
 FLASK_PROJECT="lab6_line_server"    # CURRENT flask project
 ```
 
