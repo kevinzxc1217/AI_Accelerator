@@ -25,7 +25,6 @@ RUN pip3 install -r /Docker/requirements.txt
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
 RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 
-RUN /Docker/start.sh
+RUN cp /Docker/start.sh /usr/local/bin/ && chmod 755 /usr/local/bin/start.sh 
 
-# Execute /Docker/start.sh
-# ENTRYPOINT ["/Docker/start.sh"]
+ENTRYPOINT ["/usr/local/bin/start.sh"]

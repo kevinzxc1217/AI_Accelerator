@@ -51,10 +51,12 @@ do
 done
 
 # Run the docker container
-echo "root folder: $ROOT"
+echo "docker folder: $ROOT"
 cd "$ROOT"
 
-bash run-docker.sh
-
-#docker-compose up --build
+if [ $RUN_FLASK == true ]; then
+  docker-compose up --build
+else
+  bash run-docker.sh
+fi
 

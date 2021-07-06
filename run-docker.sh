@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash +x
 
 source "$PWD"/env_setup.sh
 

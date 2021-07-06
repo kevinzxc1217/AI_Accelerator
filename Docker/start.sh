@@ -10,4 +10,8 @@ cp /Docker/ngrok /bin/
 
 if [ $RUN_FLASK == true ]; then
     uwsgi /Docker/uWSGI.ini &
+else
+  echo "Welcome to use the Playlab working environment~"
+  cd /projects || exit 1
+  exec /bin/bash -l 
 fi
