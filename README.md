@@ -1,5 +1,14 @@
 # PlayLab Docker Base
 
+## Table of Contents
+- [Host 檔案架構](#host-檔案架構)
+- [Container 檔案架構](#container-檔案架構)
+- [環境設定參數](#環境設定參數)
+- [Python Module List](python-module-list)
+- [Flask 環境](#flask-環境)
+- [一般環境](#一般環境)
+
+
 ## Host 檔案架構
 ```bash
 PlayLab Docker Base
@@ -46,6 +55,21 @@ FLASK_PROJECT="lab6_line_server"    # CURRENT flask project
 ![](https://playlab.computing.ncku.edu.tw:3001/uploads/upload_8e5dedffe9babd64353f34197dd71719.png)
 
 
+## Python Module List
+```bash
+# /Docker/requirements.txt
+
+Flask==2.0.1
+uWSGI==2.0.19
+```
+
+- 建議指定安裝版本，避免未來更新造成的相容性問題
+- 查詢已安裝的套件清單 & 版本
+    ```bash
+    $ pip list
+    ```
+
+
 ## Flask 環境
 - 在 [環境設定參數](#環境設定參數) 內設定 `RUN_FLASK=true`
 - `__main__` 檔案需命名為 app.py，並命名 Flask 物件為 `app`
@@ -70,4 +94,3 @@ FLASK_PROJECT="lab6_line_server"    # CURRENT flask project
 - 宿主機 `/projects` 掛載於 `/workspace/projects`
 - 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
 - 宿主機與 container 的 `8080` port 相互對應
-
