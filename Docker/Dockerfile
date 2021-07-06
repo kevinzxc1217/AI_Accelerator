@@ -9,7 +9,7 @@ RUN mkdir /workspace/www
 
 # Install python 3.8
 RUN apt-get update -y && \
-    apt-get install -y python3.8 python3-pip vim git nano dos2unix
+    apt-get install -y apt-utils python3.8 python3-pip vim git nano dos2unix
 
 # Change time zone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata

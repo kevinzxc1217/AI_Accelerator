@@ -5,9 +5,9 @@ source "$PWD"/env_setup.sh
 cp env_setup.sh "$PWD"/Docker/env_setup.sh
 
 # build docker image
-tag=$(echo "playlab-projects" | tr '[:upper:]' '[:lower:]')
-echo tag: $tag
-if [[ "$(docker images -q $tag > /dev/null 2>&1)" == "" ]]; then
+tag="playlab-projects"
+echo docker images -q $tag > /dev/null 2>&1
+if [[ "$(docker images -q $tag)" == "" ]]; then
     docker build -t $tag ./Docker
 fi
 

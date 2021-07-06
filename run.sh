@@ -3,7 +3,6 @@
 # setup environment variables
 ROOT="$PWD"
 source "$ROOT/env_setup.sh"
-PROJECT=${PROJECT,,}
 
 [ ! -d "./projects" ] && mkdir projects
 
