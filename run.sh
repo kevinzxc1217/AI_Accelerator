@@ -49,6 +49,12 @@ do
     fi
 done
 
+#download chisel-tutorial
+cd $ROOT/projects
+if [[ ! -d chisel-tutorial ]]; then
+  git clone https://github.com/ucb-bar/chisel-tutorial.git
+fi
+
 # Run the docker container
 echo "docker folder: $ROOT"
 cd "$ROOT"

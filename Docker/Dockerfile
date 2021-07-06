@@ -9,7 +9,8 @@ RUN mkdir /workspace/www
 
 # Install python 3.8
 RUN apt-get update -y && \
-    apt-get install -y apt-utils python3.8 python3-pip vim git nano dos2unix
+    apt-get install -y apt-utils python3.8 python3-pip vim git nano dos2unix \
+      wget curl
 
 # Change time zone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
@@ -17,6 +18,16 @@ RUN TZ=Asia/Taipei \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata
+
+#Install SBT
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list
+RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add
+
+RUN apt-get update -y && \
+    apt-get install -y openjdk-8-jdk sbt 
+RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
 
 # Update pip3
 RUN pip3 install --upgrade pip
