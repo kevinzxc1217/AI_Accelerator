@@ -2,9 +2,8 @@ FROM ubuntu:20.04
 
 ADD . /Docker
 
-WORKDIR /workspace
+WORKDIR /workspace/projects
 
-RUN mkdir /workspace/projects
 RUN mkdir /workspace/www
 
 # Install python 3.8

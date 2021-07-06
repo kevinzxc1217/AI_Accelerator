@@ -1,50 +1,72 @@
-# Docker Env for LABs
+# PlayLab Docker Base
 
-## 檔案架構
+## Host 檔案架構
+```bash
+PlayLab Docker Base
+    ├── env_setup.sh            # environment variables
+    ├── run.sh                  # environment setup script
+    ├── Docker/
+    │   ├── docker-compose.yml
+    │   ├── Dockerfile
+    │   ├── requirements.txt    # python module list
+    │   ├── uWSGI.ini
+    │   ├── nginx.conf
+    │   ├── ngrok               # version 2.3.40
+    │   └── start.sh            # container entrypoint
+    ├── projects/               # projects repos without flask
+    └── www/                    # flask project repo
 ```
-Dokcer Env for LABs
-    ├── env_setup
-    ├── run.sh
-    ├── docker-compose.yml
-    └── Docker
-        ├── Dockerfile
-        ├── requirements.txt
-        ├── uWSGI.ini
-        ├── nginx.conf
-        ├── ngrok
-        └── start.sh
+
+
+## Container 檔案架構
+```bash
+workspace/
+    ├── projects/       # ALL repos without flask
+    └── www/            # CURRENT flask project
 ```
 
 
-## Shell Script `run.sh`
-- 依需求修改 repo 的連結（第 1 行）及 repo 的名稱（第 2、3 行）
-- script 自動將 repo 內的檔案移動至 `/ProjectFiles`，並刪除 `.git` 資料夾，最後建立 container
+## 環境設定參數
+```bash
+# env_setup.sh
+
+# personal settings
+GIT_NAME=<your git name>
+GIT_EMAIL=<your git email>
+GITLAB_LOGIN=<your playlab gitlab login name>
+
+# project parameters, must be consistent with gitlab URLs
+COURSE="aica-spring-2020"
+PROJECT="aica_lab4,aica_lab5"       # ALL projects without flask
+RUN_FLASK=false                     # start docker env with nginx proxy or not
+FLASK_PROJECT="lab6_line_server"    # CURRENT flask project
+```
+
+![](https://playlab.computing.ncku.edu.tw:3001/uploads/upload_8e5dedffe9babd64353f34197dd71719.png)
 
 
-## Container : playlab-project
-### Container 內外檔案架構對應
-- `Docker` 資料夾複製到 container 內的 `/Docker`
-- `ProjectFiles` 資料夾掛載到 container 內的 `/ProjectFiles`
-
-### Flask Server
-- `__main__` 檔案需命名為 `server.py`，並命名 Flask 物件為 `app`
+## Flask 環境
+- 在 [環境設定參數](#環境設定參數) 內設定 `RUN_FLASK=true`
+- `__main__` 檔案需命名為 app.py，並命名 Flask 物件為 `app`
     ```python
-    # server.py
+    # app.py
 
+    from flask import Flask
     app = Flask(__name__)
 
-    if __name__ == '__main__':
-        app.run()
+    @app.route("/")
+    def hello_world():
+        return "<p>Hello, World!</p>"
     ```
-- uWSGI Server 通過 `8080` port 轉發 nginx 與 flask server 連線
-- 若 Lab 本身沒有要使用 flask server，可毋須移除 uWSGI 而不會發生啟動錯誤
-
-### Shell Script `start.sh`
-- 在 container 啟動後執行
-- 將 `/Docker/ngrok` 設為環境變數 `$ngrok`
-- 預設目錄為 `/Docker`
+- 宿主機 `/www` 內的 flask repo 掛載於 `/workspace/www`
+- 宿主機 `/projects` 掛載於 `/workspace/projects`
+- 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
+- uWSGI 通過 `8080` port 轉發 flask server 至 nginx，並透過宿主機 `8080` port 連線
 
 
-## Container : nginx
-- 掛載外部設定檔 `/Docker/nginx.conf` 至 Container 內部 `/etc/nginx/conf.d/default.conf`
-- 透過宿主機 http://localhost:8080 即可連線至 `/ProjectFiles` 內的 Flask Server
+## 一般環境
+- 在 [環境設定參數](#環境設定參數) 內設定 `RUN_FLASK=false`
+- 宿主機 `/projects` 掛載於 `/workspace/projects`
+- 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
+- 宿主機與 container 的 `8080` port 相互對應
+

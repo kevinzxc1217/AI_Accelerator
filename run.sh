@@ -12,24 +12,24 @@ for LAB in $LABs
 do
     cd "$ROOT"
 
-    # Check if the repo exists
+    # check if the repo exists
     git ls-remote https://playlab.computing.ncku.edu.tw:4001/$COURSE/$LAB.git -q > /dev/null 2>&1
     if [ $? != 0 ]; then
-        echo -e "The repo $LAB does not exist\n"
+        echo -e "The project repo : $LAB does not exist\n"
         continue
     fi
 
-    # Clone specified repo
+    # clone specified repo
     cd projects
     [ ! -d "./$LAB" ] && git clone https://playlab.computing.ncku.edu.tw:4001/$COURSE/$LAB.git
 
     cd $LAB
 
-    # Setup personal repo 
+    # setup personal repo 
     git config user.name $GIT_NAME
     git config user.email $GIT_EMAIL
 
-    # Remove original upstream repo
+    # remove original upstream repo
     check=$(git remote -v | grep "playlab	https://playlab.computing.ncku.edu.tw:4001")
     if [[ $check ]]; then
         git remote remove playlab
@@ -42,20 +42,71 @@ do
     check=$(git ls-remote https://playlab.computing.ncku.edu.tw:4001/$GITLAB_LOGIN/$LAB.git)
     if [[ $check =~ "fatal" ]]; 
     then
-        git push --set-upstream https://playlab.computing.ncku.edu.tw:4001/$GITLAB_LOGIN/$LAB.git master
+        branch_name=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+        git push --set-upstream https://playlab.computing.ncku.edu.tw:4001/$GITLAB_LOGIN/$LAB.git $branch_name
     else
         git fetch playlab
-        git push playlab master
+        git push playlab $branch_name
     fi
 done
 
-# Run the docker container
-echo "docker folder: $ROOT"
-cd "$ROOT"
-
 if [ $RUN_FLASK == true ]; then
-  docker-compose up --build
-else
-  bash run-docker.sh
+    [ ! -d "$ROOT/www" ] && mkdir "$ROOT/www"
+    cd "$ROOT/www"
+
+    # check if the repo exists
+    git ls-remote https://playlab.computing.ncku.edu.tw:4001/$COURSE/$FLASK_PROJECT.git -q > /dev/null 2>&1
+    if [ $? == 0 ]; then
+        [ ! -d "./$FLASK_PROJECT" ] && git clone https://playlab.computing.ncku.edu.tw:4001/$COURSE/$FLASK_PROJECT.git
+
+        cd "$FLASK_PROJECT"
+
+        # setup personal repo
+        git config user.name $GIT_NAME
+        git config user.email $GIT_EMAIL
+
+        # remove original upstream repo
+        check=$(git remote -v | grep "playlab	https://playlab.computing.ncku.edu.tw:4001")
+        if [[ $check ]]; then
+            git remote remove playlab
+        fi
+        git remote add playlab https://playlab.computing.ncku.edu.tw:4001/$GITLAB_LOGIN/$FLASK_PROJECT.git
+
+        git remote -v
+
+        # create new upstream playlab repo
+        check=$(git ls-remote https://playlab.computing.ncku.edu.tw:4001/$GITLAB_LOGIN/$FLASK_PROJECT.git)
+        if [[ $check =~ "fatal" ]]; 
+        then
+            branch_name=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+            git push --set-upstream https://playlab.computing.ncku.edu.tw:4001/$GITLAB_LOGIN/$FLASK_PROJECT.git $branch_name
+        else
+            git fetch playlab
+            git push playlab $branch_name
+        fi
+    else
+        echo -e "The flask project repo : $FLASK_PROJECT does not exist\n"
+    fi
 fi
 
+cd "$ROOT"
+
+# run the docker container
+echo "docker folder: $ROOT"
+cd "$ROOT"
+cp env_setup.sh "$ROOT"/Docker/env_setup.sh
+
+if [ $RUN_FLASK == true ]; then
+    cd Docker
+    cp ../env_setup.sh .env
+    docker-compose build --no-cache
+    docker-compose up -d
+
+    if [ $OSTYPE == "msys" ]; then
+        winpty docker exec -it playlab-projects bash
+    else
+        docker exec -it playlab-projects bash
+    fi
+else
+    bash run-docker.sh
+fi

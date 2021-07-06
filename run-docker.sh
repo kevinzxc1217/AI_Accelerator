@@ -2,8 +2,6 @@
 
 source "$PWD"/env_setup.sh
 
-cp env_setup.sh "$PWD"/Docker/env_setup.sh
-
 # build docker image
 tag="playlab-projects"
 echo docker images -q $tag > /dev/null 2>&1

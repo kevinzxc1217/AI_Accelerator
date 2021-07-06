@@ -1,0 +1,22 @@
+version: "3"
+
+services: 
+    playlab-projects:
+        container_name: playlab-projects
+        build: .
+        stdin_open: true 
+        tty: true
+        volumes: 
+            - ../projects:/workspace/projects
+            - ../www/${FLASK_PROJECT}:/workspace/www
+        expose: 
+            - 8080
+
+    playlab-nginx:
+        container_name: playlab-nginx
+        image: nginx:1.21.0
+        restart: always
+        volumes: 
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        ports: 
+            - 8080:80
