@@ -9,8 +9,8 @@ RUN mkdir /workspace/www
 
 # Install python 3.8
 RUN apt-get update -y && \
-    apt-get install -y apt-utils python3.8 python3-pip vim git nano dos2unix \
-      wget curl
+    apt-get install  --fix-missing -y apt-utils python3.8 python3-pip vim git nano dos2unix \
+      wget curl  
 
 # Change time zone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
@@ -28,6 +28,10 @@ RUN apt-get update -y && \
     apt-get install -y openjdk-8-jdk sbt 
 RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
+#Install verilator
+RUN apt-get install -y perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc 
+RUN apt-get install -y verilator
+RUN unset VERILATOR_ROOT # For bash, unsetenv for csh
 
 # Update pip3
 RUN pip3 install --upgrade pip

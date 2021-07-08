@@ -54,6 +54,11 @@ cd $ROOT/projects
 if [[ ! -d chisel-tutorial ]]; then
   git clone https://github.com/ucb-bar/chisel-tutorial.git
 fi
+if [[ ! -d verilator ]]; then
+  git clone https://github.com/verilator/verilator
+  cd verilator 
+  git pull 
+fi
 
 # Run the docker container
 echo "docker folder: $ROOT"
