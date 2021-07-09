@@ -6,7 +6,7 @@ WORKDIR /workspace/projects
 
 RUN mkdir /workspace/www
 
-# Install python 3.8
+# Install python 3.8 and other softwares
 RUN apt-get update -y && \
     apt-get install -y apt-utils python3.8 python3-pip vim git nano dos2unix
 
@@ -23,7 +23,7 @@ RUN pip3 install --upgrade pip
 # Install required python modules
 RUN pip3 install -r /Docker/requirements.txt
 
-# Convert CRLF to LF
+# Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
 RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 

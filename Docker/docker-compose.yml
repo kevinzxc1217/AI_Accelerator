@@ -8,8 +8,8 @@ services:
         tty: true
         volumes: 
             - ../projects:/workspace/projects
-            - ../www/${FLASK_PROJECT}:/workspace/www
-        expose: 
+            - ../${CURRENT_FLASK_FOLDER}:/workspace/www
+        expose:   
             - 8080
 
     playlab-nginx:

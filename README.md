@@ -46,10 +46,11 @@ GIT_EMAIL=<your git email>
 GITLAB_LOGIN=<your playlab gitlab login name>
 
 # project parameters, must be consistent with gitlab URLs
+RUN_FLASK=false                                 # start docker env with / without uWSGI and nginx proxy
 COURSE="aica-spring-2020"
-PROJECT="aica_lab4,aica_lab5"       # ALL projects without flask
-RUN_FLASK=false                     # start docker env with / without uWSGI and nginx proxy
-FLASK_PROJECT="lab6_line_server"    # CURRENT flask project
+PROJECT="aica_lab4,aica_lab5"                   # projects without flask
+FLASK_PROJECT="lab6_line_server"                # flask projects
+CURRENT_FLASK_FOLDER="www/lab6_line_server"     # mount to /workspace/www in container
 ```
 
 ![](https://playlab.computing.ncku.edu.tw:3001/uploads/upload_8e5dedffe9babd64353f34197dd71719.png)
@@ -83,14 +84,19 @@ uWSGI==2.0.19
     def hello_world():
         return "<p>Hello, World!</p>"
     ```
-- 宿主機 `/www` 內的 flask repo 掛載於 `/workspace/www`
-- 宿主機 `/projects` 掛載於 `/workspace/projects`
+- 宿主機 `./www` 內的 flask repo 掛載於 `/workspace/www`
+- 宿主機 `./projects` 掛載於 `/workspace/projects`
 - 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
 - uWSGI 通過 `8080` port 轉發 flask server 至 nginx，並透過宿主機 `8080` port 連線
+- 使用完畢後需自行關閉 container
+    ```bash
+    $ docker-compose down
+    ````
 
 
 ## 一般環境
 - 在 [環境設定參數](#環境設定參數) 內設定 `RUN_FLASK=false`
-- 宿主機 `/projects` 掛載於 `/workspace/projects`
+- 宿主機 `./projects` 掛載於 `/workspace/projects`
 - 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
 - 宿主機與 container 的 `8080` port 相互對應
+- 關閉 bash window 後 container 將會立即關閉
