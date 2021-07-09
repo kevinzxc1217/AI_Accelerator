@@ -100,3 +100,49 @@ uWSGI==2.0.19
 - 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
 - 宿主機與 container 的 `8080` port 相互對應
 - 關閉 bash window 後 container 將會立即關閉
+
+
+## SQL Support
+- 在 [/Docker/docker-compose.yml](https://playlab.computing.ncku.edu.tw:4001/CTPS/playlab-docker-base/blob/master/Docker/docker-compose.yml) 內加上對應的 service
+
+### Postgres Example
+- Docker Hub Reference : [postgres](https://hub.docker.com/_/postgres)
+
+```yml
+# /Docker/docker-compose.yml
+
+version: "3"
+
+services:
+    # ... skip ...
+    postgres:
+        image: postgres:13.3-alpine
+        volumes:
+            - ./data/db:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_DB=postgres-db
+            - POSTGRES_USER=postgres-user
+            - POSTGRES_PASSWORD=postgres-pwd
+```
+
+### MySQL Example
+- Docker Hub Reference : [mariadb](https://hub.docker.com/_/mariadb)
+
+```yml
+# /Docker/docker-compose.yml
+
+version: "3"
+
+services:
+    # ... skip ...
+    mysql:
+        image: mariadb
+        restart: always
+        volumes:
+            - ./db:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=adminpwd
+            - MYSQL_PASSWORD=userpwd
+            - MYSQL_DATABASE=dbname
+            - MYSQL_USER=user
+```
