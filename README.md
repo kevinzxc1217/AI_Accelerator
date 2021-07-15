@@ -7,6 +7,7 @@
 - [Python Module List](#python-module-list)
 - [Flask 環境](#flask-環境)
 - [一般環境](#一般環境)
+- [Demo](#demo)
 
 
 ## Host 檔案架構
@@ -146,3 +147,8 @@ services:
             - MYSQL_DATABASE=dbname
             - MYSQL_USER=user
 ```
+
+
+## Demo
+- Non-flask mode：https://youtu.be/3V51_ke31Bg
+- Flask mode：https://youtu.be/BqmUY_oP9H0
