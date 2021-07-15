@@ -17,7 +17,7 @@ fi
 
 # run a docker container
 if [ $OSTYPE == "msys" ]; then
-    winpty docker run -v "$PWD"/projects:/workspace/projects -p 8080:8080 --name playlab-projects -it $tag bash
+    winpty docker run -v "/$PWD"/projects:/workspace/projects -p 8080:8080 --name playlab-projects -it $tag bash
 else
-    docker run -v "$PWD"/projects:/workspace/projects --name playlab-projects -p 8080:8080 -it $tag bash
+    docker run -v "/$PWD"/projects:/workspace/projects --name playlab-projects -p 8080:8080 -it $tag bash
 fi
