@@ -4,7 +4,7 @@
 ROOT="$PWD"
 source "$ROOT/env_setup.sh"
 
-[ ! -d "./projects" ] && mkdir projects
+[ ! -d "./projects" ] && mkdir "projects"
 
 LABs=$(echo $PROJECT | tr "," "\n")
 
