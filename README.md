@@ -8,6 +8,7 @@
 - [Flask 環境](#flask-環境)
 - [一般環境](#一般環境)
 - [Demo](#demo)
+- [Reference](#reference)
 
 
 ## Host 檔案架構
@@ -152,3 +153,7 @@ services:
 ## Demo
 - Non-flask mode：https://youtu.be/3V51_ke31Bg
 - Flask mode：https://youtu.be/BqmUY_oP9H0
+
+
+## Reference
+- [【Flask教學系列】Flask 為甚麼需要 WSGI 與 Nginx](https://www.maxlist.xyz/2020/05/06/flask-wsgi-nginx/)
