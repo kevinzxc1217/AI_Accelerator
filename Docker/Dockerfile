@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 ADD . /Docker
 
@@ -6,9 +6,9 @@ WORKDIR /workspace/projects
 
 RUN mkdir /workspace/www
 
-# Install python 3.8 and other softwares
+# Install python 3.6 and other softwares
 RUN apt-get update -y && \
-    apt-get install -y apt-utils python3.8 python3-pip vim git nano dos2unix
+    apt-get install -y apt-utils python3.6 python3-pip vim git nano dos2unix
 
 # Change time zone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
