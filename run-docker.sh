@@ -8,7 +8,7 @@ cp env_setup.sh "$PWD"/Docker/env_setup.sh
 tag="playlab-$COURSE"
 echo docker images -q $tag > /dev/null 2>&1
 if [[ "$(docker images -q $tag)" == "" ]]; then
-    docker build -t $tag ./Docker
+    docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g)  -t $tag ./Docker
 fi
 
 # $OSTYPE
@@ -17,7 +17,7 @@ fi
 
 # run a docker container
 if [ $OSTYPE == "msys" ]; then
-    winpty docker run -v "/$PWD"/projects:/workspace/projects -p $PORT_MAPPING --name playlab-$COURSE -it --rm $tag bash
+    winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects -p $PORT_MAPPING --name playlab-$COURSE -it --rm $tag bash
 else
-    docker run -v "$PWD"/projects:/workspace/projects --name playlab-$COURSE -p $PORT_MAPPING -it $tag bash
+    docker run --privileged -v "$PWD"/projects:/workspace/projects --name playlab-$COURSE -p $PORT_MAPPING -it $tag bash
 fi
