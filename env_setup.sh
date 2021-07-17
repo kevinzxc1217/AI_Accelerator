@@ -4,7 +4,7 @@ GIT_EMAIL=weifen.lin@gs.ncku.edu.tw
 GITLAB_LOGIN=weifen
 
 # docker configuration
-COURSE="aica"
+COURSE="base"
 PORT_MAPPING="3000:3000"                        # host:container
 NGINX_PORT="8080"                               # host
 
