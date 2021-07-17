@@ -13,10 +13,10 @@ RUN mkdir /workspace/www
 
 # Install python 3.6 and other softwares
 RUN apt-get update -y 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python3-pip vim git nano dos2unix
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python3-pip vim git nano dos2unix locales
 
 # Update pip3
-RUN pip3 install --upgrade pip
+RUN DEBIAN_FRONTEND=noninteractive pip3 install --upgrade pip
 
 # Install required python modules
 RUN pip3 install -r /Docker/requirements.txt
