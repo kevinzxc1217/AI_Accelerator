@@ -31,4 +31,4 @@ else
     welcome_message
 fi
 
-exec /bin/bash -l
+
