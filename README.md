@@ -1,50 +1,164 @@
-# Docker Env for LABs
+# PlayLab Docker Base
 
-## 檔案架構
+## Table of Contents
+- [Host 檔案架構](#host-檔案架構)
+- [Container 檔案架構](#container-檔案架構)
+- [環境設定參數](#環境設定參數)
+- [Python Module List](#python-module-list)
+- [Flask 環境](#flask-環境)
+- [一般環境](#一般環境)
+- [Demo](#demo)
+- [Reference](#reference)
+
+
+## Host 檔案架構
+```bash
+PlayLab Docker Base
+    ├── env_setup.sh            # environment variables
+    ├── run.sh                  # environment setup script
+    ├── run-docker.sh           # docker run script without nginx
+    ├── Docker/
+    │   ├── docker-compose.yml
+    │   ├── Dockerfile
+    │   ├── requirements.txt    # python module list
+    │   ├── uWSGI.ini
+    │   ├── nginx.conf
+    │   ├── ngrok               # version 2.3.40
+    │   └── start.sh            # container entrypoint
+    ├── projects/               # projects repos without flask
+    └── www/                    # flask project repo
 ```
-Dokcer Env for LABs
-    ├── env_setup
-    ├── run.sh
-    ├── docker-compose.yml
-    └── Docker
-        ├── Dockerfile
-        ├── requirements.txt
-        ├── uWSGI.ini
-        ├── nginx.conf
-        ├── ngrok
-        └── start.sh
+
+
+## Container 檔案架構
+```bash
+workspace/
+    ├── projects/       # ALL repos without flask
+    └── www/            # CURRENT flask project
 ```
 
 
-## Shell Script `run.sh`
-- 依需求修改 repo 的連結（第 1 行）及 repo 的名稱（第 2、3 行）
-- script 自動將 repo 內的檔案移動至 `/ProjectFiles`，並刪除 `.git` 資料夾，最後建立 container
+## 環境設定參數
+```bash
+# env_setup.sh
+
+# personal settings
+GIT_NAME=<your git name>
+GIT_EMAIL=<your git email>
+GITLAB_LOGIN=<your playlab gitlab login name>
+
+# docker configuration
+COURSE="aica"
+PORT_MAPPING="3000:3000"                        # host:container
+NGINX_PORT="8080"                               # host
+
+# project parameters, must be consistent with gitlab URLs
+RUN_FLASK=false                                 # start docker env with / without uWSGI and nginx proxy
+COURSE_GITLAB="aica-spring-2020"
+PROJECT="aica_lab4,aica_lab5"                   # projects without flask
+FLASK_PROJECT="lab6_line_server"                # flask projects
+CURRENT_FLASK_FOLDER="www/lab6_line_server"     # mount to /workspace/www in container
+```
+
+![](https://playlab.computing.ncku.edu.tw:3001/uploads/upload_8e5dedffe9babd64353f34197dd71719.png)
 
 
-## Container : playlab-project
-### Container 內外檔案架構對應
-- `Docker` 資料夾複製到 container 內的 `/Docker`
-- `ProjectFiles` 資料夾掛載到 container 內的 `/ProjectFiles`
+## Python Module List
+```bash
+# /Docker/requirements.txt
 
-### Flask Server
-- `__main__` 檔案需命名為 `server.py`，並命名 Flask 物件為 `app`
+Flask==2.0.1
+uWSGI==2.0.19
+```
+
+- 建議指定安裝版本，避免未來更新造成的相容性問題
+- 查詢已安裝的套件清單 & 版本
+    ```bash
+    $ pip list
+    ```
+
+
+## Flask 環境
+- 在 [環境設定參數](#環境設定參數) 內設定 `RUN_FLASK=true`
+- `__main__` 檔案需命名為 app.py，並命名 Flask 物件為 `app`
     ```python
-    # server.py
+    # app.py
 
+    from flask import Flask
     app = Flask(__name__)
 
-    if __name__ == '__main__':
-        app.run()
+    @app.route("/")
+    def hello_world():
+        return "<p>Hello, World!</p>"
     ```
-- uWSGI Server 通過 `8080` port 轉發 nginx 與 flask server 連線
-- 若 Lab 本身沒有要使用 flask server，可毋須移除 uWSGI 而不會發生啟動錯誤
+- 宿主機 `./www` 內的 flask repo 掛載於 `/workspace/www`
+- 宿主機 `./projects` 掛載於 `/workspace/projects`
+- 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
+- uWSGI 通過 `8080` port 轉發 flask server 至 nginx，並透過宿主機 `8080` port 連線
+- 使用完畢後需自行關閉 container
+    ```bash
+    $ docker-compose down
+    ````
 
-### Shell Script `start.sh`
-- 在 container 啟動後執行
-- 將 `/Docker/ngrok` 設為環境變數 `$ngrok`
-- 預設目錄為 `/Docker`
+
+## 一般環境
+- 在 [環境設定參數](#環境設定參數) 內設定 `RUN_FLASK=false`
+- 宿主機 `./projects` 掛載於 `/workspace/projects`
+- 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
+- 宿主機與 container 的 `8080` port 相互對應
+- 關閉 bash window 後 container 將會立即關閉
 
 
-## Container : nginx
-- 掛載外部設定檔 `/Docker/nginx.conf` 至 Container 內部 `/etc/nginx/conf.d/default.conf`
-- 透過宿主機 http://localhost:8080 即可連線至 `/ProjectFiles` 內的 Flask Server
+## SQL Support
+- 在 [/Docker/docker-compose.yml](https://playlab.computing.ncku.edu.tw:4001/CTPS/playlab-docker-base/blob/master/Docker/docker-compose.yml) 內加上對應的 service
+
+### Postgres Example
+- Docker Hub Reference : [postgres](https://hub.docker.com/_/postgres)
+
+```yml
+# /Docker/docker-compose.yml
+
+version: "3"
+
+services:
+    # ... skip ...
+    postgres:
+        image: postgres:13.3-alpine
+        volumes:
+            - ./data/db:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_DB=postgres-db
+            - POSTGRES_USER=postgres-user
+            - POSTGRES_PASSWORD=postgres-pwd
+```
+
+### MySQL Example
+- Docker Hub Reference : [mariadb](https://hub.docker.com/_/mariadb)
+
+```yml
+# /Docker/docker-compose.yml
+
+version: "3"
+
+services:
+    # ... skip ...
+    mysql:
+        image: mariadb
+        restart: always
+        volumes:
+            - ./db:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=adminpwd
+            - MYSQL_PASSWORD=userpwd
+            - MYSQL_DATABASE=dbname
+            - MYSQL_USER=user
+```
+
+
+## Demo
+- Non-flask mode：https://youtu.be/3V51_ke31Bg
+- Flask mode：https://youtu.be/BqmUY_oP9H0
+
+
+## Reference
+- [【Flask教學系列】Flask 為甚麼需要 WSGI 與 Nginx](https://www.maxlist.xyz/2020/05/06/flask-wsgi-nginx/)

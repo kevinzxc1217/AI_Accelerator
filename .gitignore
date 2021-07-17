@@ -1,2 +1,5 @@
 projects/
+www/
 Docker/env_setup.sh
+
+.env
