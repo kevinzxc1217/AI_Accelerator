@@ -4,6 +4,9 @@ ADD . /Docker
 
 WORKDIR /workspace/projects
 
+ENV HOME /root
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN mkdir /workspace/www
 
 # Install python 3.6 and other softwares
