@@ -17,7 +17,7 @@ source /Docker/env_setup.sh
 git config --global user.name $GIT_NAME
 git config --global user.email $GIT_EMAIL
 
-cp /Docker/ngrok /bin/
+sudo cp /Docker/ngrok /bin/
 
 if [ $RUN_FLASK == true ]; then
     uwsgi -d /tmp/uWSGI.log /Docker/uWSGI.ini
@@ -25,4 +25,3 @@ else
     welcome_message
 fi
 
-exec /bin/bash -l
