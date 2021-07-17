@@ -29,10 +29,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y verilator
 RUN unset VERILATOR_ROOT # For bash, unsetenv for csh
 
 # Update pip3
-RUN pip3 install --upgrade pip
-
-# Install required python modules
-RUN pip3 install -r /Docker/requirements.txt
+RUN DEBIAN_FRONTEND=noninteractive pip3 install --upgrade pip
 
 # Change time zone
 RUN locale-gen en_US.UTF-8
@@ -47,6 +44,9 @@ RUN useradd -u $UID -m -g user -G plugdev user && \
 	chmod 0440 /etc/sudoers.d/user
 
 RUN chown -R user:user /home/user
+
+# Install required python modules
+RUN pip3 install -r /Docker/requirements.txt
 
 # Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
