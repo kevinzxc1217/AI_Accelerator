@@ -51,9 +51,9 @@ RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
 RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 
 RUN cp /Docker/start.sh /usr/local/bin/ && chmod 755 /usr/local/bin/start.sh
-
-CMD ["/usr/local/bin/start.sh"]
 USER user
-VOLUME [WORKDIR]
+RUN echo eval /usr/local/bin/start.sh > ~/.bashrc 
+CMD ["/bin/bash"]
+
 
 

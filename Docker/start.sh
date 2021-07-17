@@ -31,4 +31,3 @@ else
     welcome_message
 fi
 
-

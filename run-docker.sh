@@ -19,5 +19,5 @@ fi
 if [ $OSTYPE == "msys" ]; then
     winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects -p $PORT_MAPPING --name playlab-$COURSE -it --rm $tag bash
 else
-    docker run --privileged -v "$PWD"/projects:/workspace/projects --name playlab-$COURSE -p $PORT_MAPPING -it $tag bash
+    docker run --privileged -v "$PWD"/projects:/workspace/projects --name playlab-$COURSE -p $PORT_MAPPING -it --rm $tag bash 
 fi
