@@ -4,15 +4,13 @@ ADD . /Docker
 
 WORKDIR /workspace/projects
 
-ENV HOME /root
-ENV DEBIAN_FRONTEND noninteractive
 ARG UID=1000
 ARG GID=1000
 
 RUN mkdir /workspace/www
 
 RUN apt-get update -y 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python3-pip vim git nano dos2unix wget curl
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python3-pip vim git nano dos2unix wget curl sudo locales
 
 #Install SBT
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
@@ -54,8 +52,7 @@ RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 
 RUN cp /Docker/start.sh /usr/local/bin/ && chmod 755 /usr/local/bin/start.sh
 
-ENTRYPOINT ["/usr/local/bin/start.sh"]
-CMD ["/bin/bash"]
+CMD ["/usr/local/bin/start.sh"]
 USER user
 VOLUME [WORKDIR]
 
