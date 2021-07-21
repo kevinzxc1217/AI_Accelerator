@@ -101,8 +101,8 @@ cp env_setup.sh "$ROOT"/Docker/env_setup.sh
 if [ $RUN_FLASK == true ]; then
     cd Docker
     cp env_setup.sh "$ROOT"/Docker/.env
-    docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(id -un) --force-rm 
-    docker-compose up -d
+    docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(id -un) --force-rm --no-cache 
+    docker-compose -p $COURSE up -d
 
     if [ $OSTYPE == "msys" ]; then
         winpty docker exec -it "playlab-$COURSE" bash
