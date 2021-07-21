@@ -100,8 +100,8 @@ cp env_setup.sh "$ROOT"/Docker/env_setup.sh
 
 if [ $RUN_FLASK == true ]; then
     cd Docker
-    cp ../env_setup.sh .env
-    docker-compose build --no-cache
+    cp env_setup.sh "$ROOT"/Docker/.env
+    docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(id -un) --force-rm 
     docker-compose up -d
 
     if [ $OSTYPE == "msys" ]; then

@@ -18,10 +18,10 @@ git config --global user.name $GIT_NAME
 git config --global user.email $GIT_EMAIL
 
 sudo cp /Docker/ngrok /bin/
+sudo chmod 755 /bin/ngrok
 
 if [ $RUN_FLASK == true ]; then
     uwsgi -d /tmp/uWSGI.log /Docker/uWSGI.ini
 else
     welcome_message
 fi
-

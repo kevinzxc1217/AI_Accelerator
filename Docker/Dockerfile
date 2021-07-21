@@ -6,7 +6,7 @@ WORKDIR /workspace/projects
 
 ARG UID=1000
 ARG GID=1000
-ENV NAME=base
+ARG NAME=base
 
 RUN mkdir /workspace/www
 
@@ -18,6 +18,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python
 RUN DEBIAN_FRONTEND=noninteractive pip3 install --upgrade pip
 
 # Change time zone
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+RUN TZ=Asia/Taipei \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata
+
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -30,6 +36,7 @@ RUN useradd -u $UID -m -g $NAME -G plugdev $NAME && \
 	chmod 0440 /etc/sudoers.d/user
 
 RUN chown -R $NAME:$NAME /home/$NAME
+RUN chown -R $NAME:$NAME /Docker
 
 # Install required python modules
 RUN pip3 install -r /Docker/requirements.txt
@@ -43,6 +50,3 @@ USER $NAME
 RUN echo eval /usr/local/bin/start.sh > ~/.bashrc 
 RUN echo "export PS1=\"\[\e[0;31m\]\u@\[\e[m\e[0;34m\]\h\[\e[m \e[0;32m\] \w[\!]\$\[\e[m\]  \"" >> ~/.bashrc
 CMD ["/bin/bash"]
-
-
-
