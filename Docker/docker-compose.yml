@@ -4,11 +4,17 @@ services:
     project:
         container_name: playlab-${COURSE}
         build: .
+        image: playlab-${COURSE}
         stdin_open: true 
         tty: true
         privileged: true
-        env_file: 
-            - ./.env
+        environment:
+            - COURSE:${COURSE}
+            - CURRENT_FLASK_FOLDER:${CURRENT_FLASK_FOLDER}
+            - NGINX_PORT=${NGINX_PORT}
+            - PORT_MAPPING=${PORT_MAPPING}
+#        env_file: 
+#            - ./.env
         volumes: 
             - ../projects:/workspace/projects
             - ../www/${CURRENT_FLASK_FOLDER}:/workspace/www
@@ -21,6 +27,9 @@ services:
         container_name: playlab-nginx-${COURSE}
         image: nginx:1.21.0
         restart: always
+        environment:
+            - COURSE:${COURSE}
+            - NGINX_PORT=${NGINX_PORT}
         volumes: 
             - ./nginx.conf:/etc/nginx/conf.d/default.conf
         ports: 

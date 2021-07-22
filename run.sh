@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash +x
+
+bash cleanup.sh
 
 # setup environment variables
 ROOT="$PWD"
@@ -50,6 +52,7 @@ do
     fi
 done
 
+
 [ ! -d "$ROOT/www" ] && mkdir "$ROOT/www"
 
 FLASK_LABs=$(echo $FLASK_PROJECT | tr "," "\n")
@@ -93,16 +96,19 @@ do
     fi
 done
 
+
 # run the docker container
 echo "docker folder: $ROOT"
 cd "$ROOT"
-cp env_setup.sh "$ROOT"/Docker/env_setup.sh
+cp env_setup.sh Docker/ 
 
 if [ $RUN_FLASK == true ]; then
     cd Docker
-    cp env_setup.sh "$ROOT"/Docker/.env
-    docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(id -un) --force-rm --no-cache 
-    docker-compose -p $COURSE up -d
+    cp env_setup.sh .env
+    ls -l $ROOT/www
+    docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(id -un) --force-rm  
+    docker-compose up -d
+    ls -l $ROOT/www 
 
     if [ $OSTYPE == "msys" ]; then
         winpty docker exec -it "playlab-$COURSE" bash

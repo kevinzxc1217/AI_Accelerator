@@ -4,7 +4,7 @@ GIT_EMAIL=weifen.lin@gs.ncku.edu.tw
 GITLAB_LOGIN=weifen
 
 # docker configuration
-COURSE="base"
+COURSE=base
 
 # setup docker web service port mapping (format => host:container)
 PORT_MAPPING=3000:3000
@@ -23,4 +23,4 @@ PROJECT="aica_lab4"
 FLASK_PROJECT="lab6_line_server"
 
 # mount to /workspace/www in container
-CURRENT_FLASK_FOLDER="lab6_line_server"
+CURRENT_FLASK_FOLDER=lab6_line_server
