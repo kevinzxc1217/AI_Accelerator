@@ -1,23 +1,33 @@
 version: "3"
 
 services: 
-    playlab-projects:
-        container_name: "playlab-${COURSE}"
+    project:
+        container_name: playlab-${COURSE}
         build: .
+        image: playlab-${COURSE}
         stdin_open: true 
         tty: true
+        privileged: true
+        environment:
+            - COURSE:${COURSE}
+            - CURRENT_FLASK_FOLDER:${CURRENT_FLASK_FOLDER}
+            - NGINX_PORT=${NGINX_PORT}
+            - PORT_MAPPING=${PORT_MAPPING}
         volumes: 
             - ../projects:/workspace/projects
-            - ../${CURRENT_FLASK_FOLDER}:/workspace/www
-        expose:   
+            - ../www/${CURRENT_FLASK_FOLDER}:/workspace/www
+        expose:
             - 8080
         ports: 
             - ${PORT_MAPPING}
 
-    playlab-nginx:
-        container_name: "playlab-nginx-${COURSE}"
+    webserver:
+        container_name: playlab-nginx-${COURSE}
         image: nginx:1.21.0
         restart: always
+        environment:
+            - COURSE:${COURSE}
+            - NGINX_PORT=${NGINX_PORT}
         volumes: 
             - ./nginx.conf:/etc/nginx/conf.d/default.conf
         ports: 

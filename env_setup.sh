@@ -4,13 +4,23 @@ GIT_EMAIL=weifen.lin@gs.ncku.edu.tw
 GITLAB_LOGIN=weifen
 
 # docker configuration
-COURSE="aias"
-PORT_MAPPING="3000:3000"                        # host:container
-NGINX_PORT="8080"                               # host
+COURSE=aias
+
+# setup docker web service port mapping (format => host:container)
+PORT_MAPPING=3000:3000
+NGINX_PORT=8080
+
+# start docker env with / without uWSGI and nginx proxy
+RUN_FLASK=false
 
 # project parameters, must be consistent with gitlab URLs
-RUN_FLASK=false                                 # start docker env with / without uWSGI and nginx proxy
 COURSE_GITLAB="aias-spring-2021"
-PROJECT=""                   # projects without flask
-FLASK_PROJECT=""                # flask projects
-CURRENT_FLASK_FOLDER=""     # mount to /workspace/www in container
+
+# normal project list
+PROJECT=""
+
+# flask project list
+FLASK_PROJECT=""
+
+# mount to /workspace/www in container
+CURRENT_FLASK_FOLDER=

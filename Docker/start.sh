@@ -24,10 +24,10 @@ git config --global user.email $GIT_EMAIL
 #make -j; make install
 
 sudo cp /Docker/ngrok /bin/
+sudo chmod 755 /bin/ngrok
 
 if [ $RUN_FLASK == true ]; then
     uwsgi -d /tmp/uWSGI.log /Docker/uWSGI.ini
 else
     welcome_message
 fi
-
