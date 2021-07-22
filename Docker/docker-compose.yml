@@ -13,8 +13,6 @@ services:
             - CURRENT_FLASK_FOLDER:${CURRENT_FLASK_FOLDER}
             - NGINX_PORT=${NGINX_PORT}
             - PORT_MAPPING=${PORT_MAPPING}
-#        env_file: 
-#            - ./.env
         volumes: 
             - ../projects:/workspace/projects
             - ../www/${CURRENT_FLASK_FOLDER}:/workspace/www
