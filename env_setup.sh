@@ -8,7 +8,7 @@ COURSE=aias
 
 # setup docker web service port mapping (format => host:container)
 PORT_MAPPING=3000:3000
-NGINX_PORT=8080
+NGINX_PORT=8083
 
 # start docker env with / without uWSGI and nginx proxy
 RUN_FLASK=false

@@ -5,8 +5,8 @@ welcome_message(){
   
 Welcome to use the Playlab working environment
 
+This docker environment is set up for the AIAS course
 All projects are in the /workspace/projects directory
-The nginx web server root is in the /workspace/www directory
 
 EOF
 }

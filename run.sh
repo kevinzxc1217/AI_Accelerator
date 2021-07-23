@@ -1,6 +1,5 @@
 #!/bin/bash +x
 
-bash cleanup.sh
 
 # setup environment variables
 ROOT="$PWD"
