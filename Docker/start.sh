@@ -27,7 +27,10 @@ sudo cp /Docker/ngrok /bin/
 sudo chmod 755 /bin/ngrok
 
 if [ $RUN_FLASK == true ]; then
-    uwsgi -d /tmp/uWSGI.log /Docker/uWSGI.ini
+    running=$(ps -ef | grep uwsgi | grep -v 'grep')
+    if [[ "$running" == "" ]]; then 
+       uwsgi -d /tmp/uWSGI.log /Docker/uWSGI.ini
+    fi
 else
     welcome_message
 fi

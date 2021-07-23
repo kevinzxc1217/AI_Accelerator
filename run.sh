@@ -118,9 +118,9 @@ if [ $RUN_FLASK == true ]; then
     COMPOSE_PROJECT_NAME=$COURSE docker-compose up -d
 
     if [ $OSTYPE == "msys" ]; then
-        winpty docker exec -it "playlab-$COURSE" bash
+        winpty docker exec -it "playlab-$COURSE-flask" bash
     else
-        docker exec -it "playlab-$COURSE" bash
+        docker exec -it "playlab-$COURSE-flask" bash
     fi
 else
     bash run-docker.sh

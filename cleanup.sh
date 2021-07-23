@@ -4,7 +4,7 @@ source ./env_setup.sh
 
 # shut down the services
 cd Docker
-docker-compose down
+COMPOSE_PROJECT_NAME=$COURSE docker-compose down
 cd ..
 
 # remove docker image

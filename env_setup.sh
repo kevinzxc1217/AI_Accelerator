@@ -7,7 +7,7 @@ GITLAB_LOGIN=weifen
 COURSE=aias
 
 # setup docker web service port mapping (format => host:container)
-PORT_MAPPING=3000:3000
+PORT_MAPPING=
 NGINX_PORT=8083
 
 # start docker env with / without uWSGI and nginx proxy

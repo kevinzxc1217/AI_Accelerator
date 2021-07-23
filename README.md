@@ -48,16 +48,26 @@ GIT_EMAIL=<your git email>
 GITLAB_LOGIN=<your playlab gitlab login name>
 
 # docker configuration
-COURSE="aica"
-PORT_MAPPING="3000:3000"                        # host:container
-NGINX_PORT="8080"                               # host
+COURSE=base
+
+# setup docker web service port mapping (format => host:container)
+PORT_MAPPING=
+NGINX_PORT=8080
+
+# start docker env with / without uWSGI and nginx proxy
+RUN_FLASK=true
 
 # project parameters, must be consistent with gitlab URLs
-RUN_FLASK=false                                 # start docker env with / without uWSGI and nginx proxy
 COURSE_GITLAB="aica-spring-2020"
-PROJECT="aica_lab4,aica_lab5"                   # projects without flask
-FLASK_PROJECT="lab6_line_server"                # flask projects
-CURRENT_FLASK_FOLDER="www/lab6_line_server"     # mount to /workspace/www in container
+
+# normal project list
+PROJECT="aica_lab4"
+
+# flask project list
+FLASK_PROJECT="lab6_line_server"
+
+# mount to /workspace/www in container
+CURRENT_FLASK_FOLDER=lab6_line_server
 ```
 
 ![](https://playlab.computing.ncku.edu.tw:3001/uploads/upload_8e5dedffe9babd64353f34197dd71719.png)
@@ -94,7 +104,7 @@ uWSGI==2.0.19
 - 宿主機 `./www` 內的 flask repo 掛載於 `/workspace/www`
 - 宿主機 `./projects` 掛載於 `/workspace/projects`
 - 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
-- uWSGI 通過 `8080` port 轉發 flask server 至 nginx，並透過宿主機 `8080` port 連線
+- Docker container 內 `/workspace/www/app.py` 可透過宿主機 `NGINX_PORT` port 連線存取
 - 使用完畢後需自行關閉 container
     ```bash
     $ docker-compose down
@@ -105,7 +115,7 @@ uWSGI==2.0.19
 - 在 [環境設定參數](#環境設定參數) 內設定 `RUN_FLASK=false`
 - 宿主機 `./projects` 掛載於 `/workspace/projects`
 - 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
-- 宿主機與 container 的 `8080` port 相互對應
+- 透過 `PORT_MAPPING` 指定宿主機與 container 相互映射的 port，並可透過分隔符號 `,` 同時指定多組映射
 - 關閉 bash window 後 container 將會立即關閉
 
 
