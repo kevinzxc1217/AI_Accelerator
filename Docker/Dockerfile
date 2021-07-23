@@ -6,7 +6,7 @@ WORKDIR /workspace/projects
 
 ARG UID=1000
 ARG GID=1000
-ARG NAME=aias
+ARG NAME=base
 
 RUN mkdir /workspace/www
 

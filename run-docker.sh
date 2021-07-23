@@ -8,7 +8,7 @@ cp env_setup.sh "$PWD"/Docker/env_setup.sh
 tag="playlab-$COURSE"
 echo docker images -q $tag > /dev/null 2>&1
 if [[ "$(docker images -q $tag)" == "" ]]; then
-    docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t $tag ./Docker
+    docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg NAME=$(id -un) -t $tag ./Docker
 fi
 
 # $OSTYPE
