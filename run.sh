@@ -106,8 +106,9 @@ if [ $RUN_FLASK == true ]; then
     cd Docker
     cp env_setup.sh .env
     ls -l $ROOT/www
-    docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(id -un) --force-rm  
+    docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(id -un) --force-rm
     docker-compose up -d
+    # docker-compose -p playlab-$COURSE up -d
     ls -l $ROOT/www 
 
     if [ $OSTYPE == "msys" ]; then

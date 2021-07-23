@@ -2,7 +2,7 @@ version: "3"
 
 services: 
     project:
-        container_name: playlab-${COURSE}
+        container_name: playlab-${COURSE}-flask
         build: .
         image: playlab-${COURSE}
         stdin_open: true 
@@ -18,8 +18,6 @@ services:
             - ../www/${CURRENT_FLASK_FOLDER}:/workspace/www
         expose:
             - 8080
-        ports: 
-            - ${PORT_MAPPING}
 
     webserver:
         container_name: playlab-nginx-${COURSE}

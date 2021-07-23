@@ -16,8 +16,17 @@ fi
 #   mac => darwin
 
 # run a docker container
+
+PORTs=$(echo $PORT_MAPPING | tr "," "\n")
+PORT_OPTION=""
+
+for PORT in $PORTs
+do
+    PORT_OPTION="$PORT_OPTION -p $PORT"
+done
+
 if [ $OSTYPE == "msys" ]; then
-    winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects -p $PORT_MAPPING --name playlab-$COURSE -it --rm $tag bash
+    winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects $PORT_OPTION --name playlab-$COURSE -it --rm $tag bash
 else
-    docker run --privileged -v "$PWD"/projects:/workspace/projects -p $PORT_MAPPING --name playlab-$COURSE -it --rm $tag bash
+    docker run --privileged -v "$PWD"/projects:/workspace/projects $PORT_OPTION --name playlab-$COURSE -it --rm $tag bash
 fi
