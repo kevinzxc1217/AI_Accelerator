@@ -8,11 +8,15 @@ ARG UID=1000
 ARG GID=1000
 ARG NAME=base
 
+ENV SCALA_VERSION=2.12.11
+ENV ALMOND_VERSION=0.10.0
+
 RUN mkdir /workspace/www
 
 # Install python 3.6 and other softwares
 RUN apt-get update -y 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python3-pip vim git nano dos2unix wget curl locales sudo
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python3-pip \
+        openjdk-8-jre-headless vim git nano dos2unix wget curl locales sudo
 
 # Update pip3
 RUN DEBIAN_FRONTEND=noninteractive pip3 install --upgrade pip
@@ -39,7 +43,18 @@ RUN chown -R $NAME:$NAME /home/$NAME
 RUN chown -R $NAME:$NAME /Docker
 
 # Install required python modules
+RUN pip3 install notebook
 RUN pip3 install -r /Docker/requirements.txt
+
+RUN curl -Lo coursier https://git.io/coursier-cli && chmod +x coursier && \
+    ./coursier bootstrap \
+        -r jitpack \
+        sh.almond:scala-kernel_$SCALA_VERSION:$ALMOND_VERSION \
+        --sources \
+        --default=true \
+        -o almond && \
+    ./almond --install --global --id scala --display-name "Scala $SCALA_VERSION" && \
+    rm -f almond couriser
 
 # Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix

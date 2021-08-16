@@ -17,8 +17,11 @@ source /Docker/env_setup.sh
 git config --global user.name $GIT_NAME
 git config --global user.email $GIT_EMAIL
 
-sudo cp /Docker/ngrok /bin/
+sudo mv /Docker/ngrok /bin/
 sudo chmod 755 /bin/ngrok
+sudo chmod -R 777 /workspace
+
+jupyter notebook --no-browser --config /Docker/jupyter_notebook_config.py &> /dev/null &
 
 if [ $RUN_FLASK == true ]; then
     running=$(ps -ef | grep uwsgi | grep -v 'grep')

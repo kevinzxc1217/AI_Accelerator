@@ -18,6 +18,8 @@ services:
             - ../www/${CURRENT_FLASK_FOLDER}:/workspace/www
         expose:
             - 8080
+        ports: 
+            - ${JUPYTER_PORT}:10000
 
     webserver:
         container_name: playlab-nginx-${COURSE}

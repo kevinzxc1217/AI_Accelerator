@@ -9,6 +9,7 @@ COURSE=base
 # setup docker web service port mapping (format => host:container)
 PORT_MAPPING=
 NGINX_PORT=8080
+JUPYTER_PORT=10000
 
 # start docker env with / without uWSGI and nginx proxy
 RUN_FLASK=true

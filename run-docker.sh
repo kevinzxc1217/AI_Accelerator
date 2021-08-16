@@ -26,7 +26,7 @@ do
 done
 
 if [ $OSTYPE == "msys" ]; then
-    winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects $PORT_OPTION --name playlab-$COURSE -it --rm $tag bash
+    winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects -p $JUPYTER_PORT:10000 $PORT_OPTION --name playlab-$COURSE -it --rm $tag bash
 else
-    docker run --privileged -v "$PWD"/projects:/workspace/projects $PORT_OPTION --name playlab-$COURSE -it --rm $tag bash
+    docker run --privileged -v "$PWD"/projects:/workspace/projects -p $JUPYTER_PORT:10000 $PORT_OPTION --name playlab-$COURSE -it --rm $tag bash
 fi
