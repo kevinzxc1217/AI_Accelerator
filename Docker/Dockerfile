@@ -28,7 +28,7 @@ RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 #Install verilator
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y verilator
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y verilator gdb cgdb valgrind
 RUN unset VERILATOR_ROOT # For bash, unsetenv for csh
 
 # Update pip3
@@ -68,6 +68,9 @@ RUN curl -Lo coursier https://git.io/coursier-cli && chmod +x coursier && \
         -o almond && \
     ./almond --install --global --id scala --display-name "Scala $SCALA_VERSION" && \
     rm -f almond couriser
+
+ENV export MILL_VERSION 0.10.0-M5
+RUN curl -L https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill
 
 # Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix

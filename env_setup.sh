@@ -17,7 +17,7 @@ JUPYTER_PORT=10000
 RUN_FLASK=false
 
 # project parameters, must be consistent with gitlab URLs
-COURSE_GITLAB="aias-spring-2021"
+COURSE_GITLAB="aias-spring-2022"
 
 # normal project list
 PROJECT=""
