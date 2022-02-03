@@ -64,6 +64,33 @@ fi
 if [[ ! -d chisel-template-lite ]]; then
   git clone https://github.com/edwardcwang/chisel-template-lite.git
 fi
+if [[ ! -d rv32emulator ]]; then
+  git clone https://github.com/sangwoojun/rv32emulator
+  cd rv32emulator
+  make
+fi
+if [[ ! -d qemu ]]; then
+  git clone https://git.qemu.org/git/qemu.git
+  cd qemu 
+  ./configure --target-list=riscv32-linux-user,riscv32-softmmu
+  make 
+  make install
+fi
+if [[ ! -d rv32emu ]]; then
+  git clone https://github.com/sysprog21/rv32emu
+  cd rv32emu 
+  make 
+  make check
+  make arch-test RISCV_DEVICE=I
+fi
+if [[ ! -d riscv32-tools ]]; then
+  mkdir -p /workspace/projects/riscv32-tools
+  cd riscv32-tools
+  wget https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu1804-release/10/artifact/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
+  wget https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases/download/v10.2.0-1.1/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
+  tar zxvf riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
+  tar zxvf xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
+fi
 
 
 # run the docker container

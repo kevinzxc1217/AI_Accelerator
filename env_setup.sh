@@ -1,10 +1,10 @@
 # personal settings
-GIT_NAME="Wei-Fen Lin"
-GIT_EMAIL=weifen.lin@gs.ncku.edu.tw
-GITLAB_LOGIN=weifen
+GIT_NAME="xuann0118"
+GIT_EMAIL=xuann.cn@gmail.com
+GITLAB_LOGIN=xuann0118
 
 # docker configuration
-COURSE=aias
+COURSE=aiasq
 
 # setup docker web service port mapping (format => host:container)
 PORT_MAPPING=
