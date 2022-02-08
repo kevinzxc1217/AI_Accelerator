@@ -1,10 +1,10 @@
 # personal settings
-GIT_NAME="xuann0118"
-GIT_EMAIL=xuann.cn@gmail.com
-GITLAB_LOGIN=xuann0118
+GIT_NAME="weifen"
+GIT_EMAIL=weifen.lin@gs.ncku.edu.tw
+GITLAB_LOGIN=weifen
 
 # docker configuration
-COURSE=aiasq
+COURSE=aias
 
 
 # project parameters, must be consistent with gitlab URLs

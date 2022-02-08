@@ -1,5 +1,5 @@
 projects/
 www/
 Docker/env_setup.sh
-
+.DS_Store
 .env

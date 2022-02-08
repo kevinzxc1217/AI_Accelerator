@@ -10,8 +10,6 @@ ARG UID=1000
 ARG GID=1000
 ARG NAME=base
 
-#ENV SCALA_VERSION=2.12.11
-#ENV ALMOND_VERSION=0.10.0
 
 RUN apt-get update -y 
 
@@ -58,15 +56,6 @@ RUN chown -R $NAME:$NAME /Docker
 # Install required python modules
 RUN pip3 install -r /Docker/requirements.txt
 
-#RUN curl -Lo coursier https://git.io/coursier-cli && chmod +x coursier && \
-#    ./coursier bootstrap \
-#        -r jitpack \
-#        sh.almond:scala-kernel_$SCALA_VERSION:$ALMOND_VERSION \
-#        --sources \
-#        --default=true \
-#        -o almond && \
-#    ./almond --install --global --id scala --display-name "Scala $SCALA_VERSION" && \
-#    rm -f almond couriser
 
 ENV export MILL_VERSION 0.10.0-M5
 
@@ -142,8 +131,8 @@ RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 RUN cp /Docker/start.sh /usr/local/bin/ && chmod 755 /usr/local/bin/start.sh
 USER $NAME
 RUN echo eval /usr/local/bin/start.sh > ~/.bashrc 
-RUN echo "export PATH=/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin:$PATH \"" >> ~/.bashrc
-RUN echo "export PATH=/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin:$PATH \"" >> ~/.bashrc
+RUN echo "export PATH=/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin:$PATH" >> ~/.bashrc
+RUN echo "export PATH=/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin:$PATH" >> ~/.bashrc
 RUN echo "export PS1=\"\[\e[0;31m\]\u@\[\e[m\e[0;34m\]\h\[\e[m \e[0;32m\] \w[\!]\$\[\e[m\]  \"" >> ~/.bashrc
 
 
