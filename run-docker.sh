@@ -17,16 +17,10 @@ fi
 
 # run a docker container
 
-PORTs=$(echo $PORT_MAPPING | tr "," "\n")
-PORT_OPTION=""
-
-for PORT in $PORTs
-do
-    PORT_OPTION="$PORT_OPTION -p $PORT"
-done
 
 if [ $OSTYPE == "msys" ]; then
-    winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects -p $JUPYTER_PORT:10000 $PORT_OPTION --name playlab-$COURSE -it --rm $tag bash
+    winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects --name playlab-$COURSE -it --rm $tag bash
 else
-    docker run --privileged -v "$PWD"/projects:/workspace/projects -p $JUPYTER_PORT:10000 $PORT_OPTION --name playlab-$COURSE -it --rm $tag bash
+    echo docker run --privileged -v "$PWD"/projects:/workspace/projects  --name playlab-$COURSE -it --rm $tag bash
+    docker run --privileged -v "$PWD"/projects:/workspace/projects  --name playlab-$COURSE  -it --rm $tag bash
 fi

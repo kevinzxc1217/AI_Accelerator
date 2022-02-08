@@ -2,16 +2,16 @@ FROM ubuntu:18.04
 
 ADD . /Docker
 
+RUN mkdir -p /workspace/projects
+
 WORKDIR /workspace/projects
 
 ARG UID=1000
 ARG GID=1000
 ARG NAME=base
 
-ENV SCALA_VERSION=2.12.11
-ENV ALMOND_VERSION=0.10.0
-
-RUN mkdir /workspace/www
+#ENV SCALA_VERSION=2.12.11
+#ENV ALMOND_VERSION=0.10.0
 
 RUN apt-get update -y 
 
@@ -56,18 +56,17 @@ RUN chown -R $NAME:$NAME /home/$NAME
 RUN chown -R $NAME:$NAME /Docker
 
 # Install required python modules
-RUN pip3 install notebook
 RUN pip3 install -r /Docker/requirements.txt
 
-RUN curl -Lo coursier https://git.io/coursier-cli && chmod +x coursier && \
-    ./coursier bootstrap \
-        -r jitpack \
-        sh.almond:scala-kernel_$SCALA_VERSION:$ALMOND_VERSION \
-        --sources \
-        --default=true \
-        -o almond && \
-    ./almond --install --global --id scala --display-name "Scala $SCALA_VERSION" && \
-    rm -f almond couriser
+#RUN curl -Lo coursier https://git.io/coursier-cli && chmod +x coursier && \
+#    ./coursier bootstrap \
+#        -r jitpack \
+#        sh.almond:scala-kernel_$SCALA_VERSION:$ALMOND_VERSION \
+#        --sources \
+#        --default=true \
+#        -o almond && \
+#    ./almond --install --global --id scala --display-name "Scala $SCALA_VERSION" && \
+#    rm -f almond couriser
 
 ENV export MILL_VERSION 0.10.0-M5
 RUN curl -L https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill
