@@ -17,11 +17,6 @@ source /Docker/env_setup.sh
 git config --global user.name $GIT_NAME
 git config --global user.email $GIT_EMAIL
 
-#build verilator
-#cd /workspace/projects/verilator
-#autoconf
-#./configure
-#make -j; make install
 
 sudo cp /Docker/ngrok /bin/
 sudo chmod 755 /bin/ngrok
