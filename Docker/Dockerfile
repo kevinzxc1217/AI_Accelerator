@@ -69,7 +69,71 @@ RUN pip3 install -r /Docker/requirements.txt
 #    rm -f almond couriser
 
 ENV export MILL_VERSION 0.10.0-M5
+
 RUN curl -L https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill
+
+
+# Add qeumu environment
+ENV QEMU_PACKAGES build-essential \
+        ccache \
+        chrpath \
+        clang \
+        cpio \
+        diffstat \
+        gawk \
+        gettext \
+        git \
+        git-core \
+        glusterfs-common \
+        libaio-dev \
+        libattr1-dev \
+        libbrlapi-dev \
+        libbz2-dev \
+        libcacard-dev \
+        libcap-ng-dev \
+        libcurl4-gnutls-dev \
+        libdrm-dev \
+        libepoxy-dev \
+        libfdt-dev \
+        libgbm-dev \
+        libibverbs-dev \
+        libiscsi-dev \
+        libjemalloc-dev \
+        libjpeg-turbo8-dev \
+        liblzo2-dev \
+        libncursesw5-dev \
+        libnfs-dev \
+        libnss3-dev \
+        libnuma-dev \
+        libpixman-1-dev \
+        librados-dev \
+        librbd-dev \
+        librdmacm-dev \
+        libsasl2-dev \
+        libseccomp-dev \
+        libsnappy-dev \
+        libspice-protocol-dev \
+        libspice-server-dev \
+        libssh-dev \
+        libssl-dev \
+        libusb-1.0-0-dev \
+        libusbredirhost-dev \
+        libvdeplug-dev \
+        libvte-2.91-dev \
+        libzstd-dev \
+        locales \
+        make \
+        ninja-build \
+        python3-yaml \
+        python3-sphinx \
+        python3-sphinx-rtd-theme \
+        samba \
+        sparse \
+        texinfo \
+        xfslibs-dev \
+        libsdl2-dev
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install $QEMU_PACKAGES
 
 # Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
@@ -78,5 +142,13 @@ RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 RUN cp /Docker/start.sh /usr/local/bin/ && chmod 755 /usr/local/bin/start.sh
 USER $NAME
 RUN echo eval /usr/local/bin/start.sh > ~/.bashrc 
+RUN echo "export PATH=/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin:$PATH \"" >> ~/.bashrc
+RUN echo "export PATH=/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin:$PATH \"" >> ~/.bashrc
 RUN echo "export PS1=\"\[\e[0;31m\]\u@\[\e[m\e[0;34m\]\h\[\e[m \e[0;32m\] \w[\!]\$\[\e[m\]  \"" >> ~/.bashrc
+
+
 CMD ["/bin/bash"]
+
+
+
+
