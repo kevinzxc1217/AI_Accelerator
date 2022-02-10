@@ -67,20 +67,22 @@ fi
 if [[ ! -d rv32emulator ]]; then
   git clone https://github.com/sangwoojun/rv32emulator
 fi
-if [[ ! -d qemu ]]; then
-  git clone https://git.qemu.org/git/qemu.git
-fi
 if [[ ! -d rv32emu ]]; then
   git clone https://github.com/sysprog21/rv32emu
 fi
 if [[ ! -d riscv32-tools ]]; then
   mkdir -p /workspace/projects/riscv32-tools
-  cd riscv32-tools
-  wget https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu1804-release/10/artifact/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
+  cd /workspace/projects/riscv32-tools
   wget https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases/download/v10.2.0-1.1/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
+  wget https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu1804-release/10/artifact/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
   tar zxvf riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
   tar zxvf xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
+  rm riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
+  rm xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
 fi
+# if [[ ! -d qemu ]]; then
+#   git clone https://git.qemu.org/git/qemu.git
+# fi
 
 
 # run the docker container

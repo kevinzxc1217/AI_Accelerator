@@ -120,9 +120,12 @@ ENV QEMU_PACKAGES build-essential \
         sparse \
         texinfo \
         xfslibs-dev \
-        libsdl2-dev
+        libsdl2-dev 
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install $QEMU_PACKAGES
+
+# Add toolchain search path
+ENV  PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin:/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin
 
 # Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
@@ -131,8 +134,6 @@ RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 RUN cp /Docker/start.sh /usr/local/bin/ && chmod 755 /usr/local/bin/start.sh
 USER $NAME
 RUN echo eval /usr/local/bin/start.sh > ~/.bashrc 
-RUN echo "export PATH=/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin:$PATH" >> ~/.bashrc
-RUN echo "export PATH=/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin:$PATH" >> ~/.bashrc
 RUN echo "export PS1=\"\[\e[0;31m\]\u@\[\e[m\e[0;34m\]\h\[\e[m \e[0;32m\] \w[\!]\$\[\e[m\]  \"" >> ~/.bashrc
 
 
