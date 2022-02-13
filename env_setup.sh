@@ -10,4 +10,4 @@ COURSE=aias
 COURSE_GITLAB="AIAS_spring_2022"
 
 # normal project list
-PROJECT="Lab2,Lab3"
+PROJECT=""

@@ -20,17 +20,19 @@ git config --global core.editor vim
 
 sudo chmod -R 777 /workspace
 
-# Add toolchain search path  
-export
-
 # Environment build up
-cd /workspace/projects/rv32emulator
-make clean
-make
+# cd /workspace/projects/rv32emulator
+# make clean
+# make
 
-cd /workspace/projects/rv32emu
-make
-make check
-make arch-test RISCV_DEVICE=I
+# cd /workspace/projects/rv32emu
+# make
+# make check
+# make arch-test RISCV_DEVICE=I
+
+# cd /workspace/projects/qemu
+# ./configure --target-list=riscv32-linux-user,riscv32-softmmu
+# make
+# make install
 
 welcome_message

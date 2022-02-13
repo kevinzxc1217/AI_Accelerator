@@ -80,9 +80,9 @@ if [[ ! -d riscv32-tools ]]; then
   rm riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
   rm xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
 fi
-# if [[ ! -d qemu ]]; then
-#   git clone https://git.qemu.org/git/qemu.git
-# fi
+if [[ ! -d qemu ]]; then
+  git clone https://git.qemu.org/git/qemu.git
+fi
 
 
 # run the docker container
