@@ -10,7 +10,6 @@ ARG UID=1000
 ARG GID=1000
 ARG NAME=base
 
-
 RUN apt-get update -y 
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python3-pip vim git nano dos2unix wget curl sudo locales openjdk-8-jre-headless
@@ -56,11 +55,9 @@ RUN chown -R $NAME:$NAME /Docker
 # Install required python modules
 RUN pip3 install -r /Docker/requirements.txt
 
-
 ENV export MILL_VERSION 0.10.0-M5
 
 RUN curl -L https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill
-
 
 # Add qeumu environment
 ENV QEMU_PACKAGES build-essential \
@@ -125,7 +122,7 @@ ENV QEMU_PACKAGES build-essential \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install $QEMU_PACKAGES
 
 # Add toolchain search path
-ENV  PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin:/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin
+ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin:/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin
 
 # Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
@@ -136,9 +133,4 @@ USER $NAME
 RUN echo eval /usr/local/bin/start.sh > ~/.bashrc 
 RUN echo "export PS1=\"\[\e[0;31m\]\u@\[\e[m\e[0;34m\]\h\[\e[m \e[0;32m\] \w[\!]\$\[\e[m\]  \"" >> ~/.bashrc
 
-
 CMD ["/bin/bash"]
-
-
-
-
