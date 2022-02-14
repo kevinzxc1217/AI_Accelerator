@@ -56,9 +56,7 @@ if [[ ! -d chisel-tutorial ]]; then
     git clone https://github.com/ucb-bar/chisel-tutorial.git
 fi
 if [[ ! -d verilator ]]; then
-    git clone https://github.com/verilator/verilator
-    cd verilator
-    git pull
+    git clone --depth=1 https://github.com/verilator/verilator
 fi
 if [[ ! -d chisel-template-lite ]]; then
     git clone https://github.com/edwardcwang/chisel-template-lite.git
@@ -70,17 +68,18 @@ if [[ ! -d rv32emu ]]; then
     git clone https://github.com/sysprog21/rv32emu
 fi
 if [[ ! -d riscv32-tools ]]; then
-    mkdir -p /workspace/projects/riscv32-tools
-    cd /workspace/projects/riscv32-tools
+    mkdir riscv32-tools
+    cd riscv32-tools
     wget https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases/download/v10.2.0-1.1/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
-    wget https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu1804-release/10/artifact/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
+    wget --no-check-certificate https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu1804-release/10/artifact/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
     tar zxvf riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
     tar zxvf xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
     rm riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
     rm xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
 fi
+cd $ROOT/projects
 if [[ ! -d qemu ]]; then
-    git clone https://git.qemu.org/git/qemu.git
+    git clone --depth=1 https://git.qemu.org/git/qemu.git
 fi
 
 # run the docker container

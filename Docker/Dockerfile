@@ -55,7 +55,7 @@ RUN chown -R $NAME:$NAME /Docker
 # Install required python modules
 RUN pip3 install -r /Docker/requirements.txt
 
-ENV export MILL_VERSION 0.10.0-M5
+ENV MILL_VERSION 0.10.0-M5
 
 RUN curl -L https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill
 
