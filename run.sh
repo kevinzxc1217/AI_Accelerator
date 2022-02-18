@@ -55,9 +55,6 @@ cd $ROOT/projects
 if [[ ! -d chisel-tutorial ]]; then
     git clone https://github.com/ucb-bar/chisel-tutorial.git
 fi
-if [[ ! -d verilator ]]; then
-    git clone --depth=1 https://github.com/verilator/verilator
-fi
 if [[ ! -d chisel-template-lite ]]; then
     git clone https://github.com/edwardcwang/chisel-template-lite.git
 fi

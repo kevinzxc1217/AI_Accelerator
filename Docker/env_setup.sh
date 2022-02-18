@@ -1,5 +1,5 @@
 # personal settings
-GIT_NAME="Wei-Kai Hsu"
+GIT_NAME="WeiKai-Hsu"
 GIT_EMAIL=N26104890@gs.ncku.edu.tw
 GITLAB_LOGIN=ken881015
 
@@ -10,4 +10,4 @@ COURSE=aias
 COURSE_GITLAB="AIAS_spring_2022"
 
 # normal project list
-PROJECT="playlab-chisel-template"
+PROJECT=""
