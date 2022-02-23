@@ -7,7 +7,7 @@ GITLAB_LOGIN=ken881015
 COURSE=aias
 
 # project parameters, must be consistent with gitlab URLs
-COURSE_GITLAB="AIAS_spring_2022"
+COURSE_GITLAB="aias_spring_2022"
 
 # normal project list
 PROJECT="playlab-chisel-template"

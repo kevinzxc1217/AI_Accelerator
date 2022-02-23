@@ -1,4 +1,4 @@
-#!/bin/bash +x
+#!/bin/bash
 
 source "$PWD"/env_setup.sh
 
@@ -21,6 +21,5 @@ fi
 if [ $OSTYPE == "msys" ]; then
     winpty docker run --privileged -v "/$PWD"/projects:/workspace/projects --name playlab-$COURSE -it --rm $tag bash
 else
-    echo docker run --privileged -v "$PWD"/projects:/workspace/projects  --name playlab-$COURSE -it --rm $tag bash
-    docker run --privileged -v "$PWD"/projects:/workspace/projects  --name playlab-$COURSE  -it --rm $tag bash
+    docker run --privileged -v "$PWD"/projects:/workspace/projects --name playlab-$COURSE -it --rm $tag bash
 fi
