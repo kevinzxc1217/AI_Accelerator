@@ -36,4 +36,14 @@ if [[ ! -d /workspace/projects/qemu ]]; then
     git clone --depth=1 https://git.qemu.org/git/qemu.git /workspace/projects/qemu
 fi
 
+if [[ ! -d /workspace/projects/riscv32-tools ]]; then
+    mkdir -p /workspace/projects/riscv32-tools
+    wget https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases/download/v10.2.0-1.1/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz -P /workspace/projects/riscv32-tools/
+    wget --no-check-certificate https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu1804-release/10/artifact/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz -P /workspace/projects/riscv32-tools/
+    tar zxvf /workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz -C /workspace/projects/riscv32-tools/
+    tar zxvf /workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz -C /workspace/projects/riscv32-tools/
+    rm /workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
+    rm /workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
+fi
+
 welcome_message

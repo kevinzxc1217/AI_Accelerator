@@ -21,12 +21,12 @@ RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E4
 
 RUN apt-get update -y 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-8-jdk sbt 
-RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
 #Install verilator
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y verilator gdb cgdb valgrind
-RUN unset VERILATOR_ROOT # For bash, unsetenv for csh
+RUN unset VERILATOR_ROOT
 
 # Update pip3
 RUN DEBIAN_FRONTEND=noninteractive pip3 install --upgrade pip
@@ -122,7 +122,8 @@ ENV QEMU_PACKAGES build-essential \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install $QEMU_PACKAGES
 
 # Add toolchain search path
-ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin:/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin
+ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin
+ENV PATH=$PATH:/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin
 
 # Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
