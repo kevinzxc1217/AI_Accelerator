@@ -18,7 +18,7 @@ git config --global user.name $GIT_NAME
 git config --global user.email $GIT_EMAIL
 git config --global core.editor vim
 
-sudo chown -R $(id -un):$(id -un) /workspace
+sudo chown -R "$(id -un)":"$(id -un)" /workspace
 
 if [[ ! -d /workspace/projects/chisel-tutorial ]]; then
     git clone https://github.com/ucb-bar/chisel-tutorial.git /workspace/projects/chisel-tutorial
