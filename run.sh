@@ -46,9 +46,6 @@ do
     then
         branch_name=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
         git push --set-upstream https://playlab.computing.ncku.edu.tw:4001/$GITLAB_LOGIN/$LAB.git $branch_name
-    else
-        git fetch playlab
-        git push playlab $branch_name
     fi
 done
 
