@@ -5,7 +5,7 @@ source ./env_setup.sh
 # remove docker container
 tag="playlab-$COURSE"
 if [[ "$(docker ps -a -q  --filter ancestor=$tag)" != "" ]]; then
-    docker rm $(docker ps -a -q  --filter ancestor=$tag)
+    docker rm $(docker ps -a -q  --filter ancestor=$tag) -f 
 fi
 
 # remove docker image
