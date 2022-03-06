@@ -28,10 +28,6 @@ if [[ ! -d /workspace/projects/chisel-template-lite ]]; then
     echo clone chisel-template-lite....
     git clone https://github.com/edwardcwang/chisel-template-lite.git /workspace/projects/chisel-template-lite
 fi
-if [[ ! -d /workspace/projects/rv32emulator ]]; then
-    echo clone rv32emulator.....
-    git clone https://github.com/sangwoojun/rv32emulator /workspace/projects/rv32emulator
-fi
 if [[ ! -d /workspace/projects/rv32emu ]]; then
     echo clone rv32emu....
     git clone https://github.com/sysprog21/rv32emu /workspace/projects/rv32emu
