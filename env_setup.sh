@@ -1,7 +1,7 @@
 # personal settings
-GIT_NAME="Wei-Fen Lin"
-GIT_EMAIL=weifen.lin@gs.ncku.edu.tw
-GITLAB_LOGIN=weifen
+GIT_NAME="xuann0118"
+GIT_EMAIL=xuann.cn@gmail.com
+GITLAB_LOGIN=xuann0118
 
 # docker configuration
 COURSE=aias
