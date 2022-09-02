@@ -40,12 +40,10 @@ fi
 if [[ ! -d /workspace/projects/riscv32-tools ]]; then
     echo setup riscv32-tools .....
     mkdir -p /workspace/projects/riscv32-tools
-    wget https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases/download/v10.2.0-1.1/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz -P /workspace/projects/riscv32-tools/
-    wget --no-check-certificate https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu1804-release/10/artifact/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz -P /workspace/projects/riscv32-tools/
-    tar zxvf /workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz -C /workspace/projects/riscv32-tools/
-    tar zxvf /workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz -C /workspace/projects/riscv32-tools/
-    rm /workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0.tar.gz
-    rm /workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1-linux-x64.tar.gz
+    wget --no-check-certificate https://osp.computing.ncku.edu.tw:8001/share.cgi?ssid=e7b5fa10dc1f4e87aa89082ce4da6bb4&fid=e7b5fa10dc1f4e87aa89082ce4da6bb4&path=%2F&filename=riscv32-elf-ubuntu-20.04-nightly-2022.03.09-nightly.tar.gz&openfolder=forcedownload&ep= -O riscv32-elf.tar.gz -P /workspace/projects/riscv32-tools/
+    tar zxvf /workspace/projects/riscv32-tools/riscv32-elf.tar.gz -C /workspace/projects/riscv32-tools/
+    rm /workspace/projects/riscv32-tools/riscv32-elf.tar.gz
 fi
 
 welcome_message
+echo aias fall 2022 workspace is created.

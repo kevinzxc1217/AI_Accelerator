@@ -122,8 +122,7 @@ ENV QEMU_PACKAGES build-essential \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install $QEMU_PACKAGES
 
 # Add toolchain search path
-ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-embecosm-ubuntu1804-gcc11.2.0/bin
-ENV PATH=$PATH:/workspace/projects/riscv32-tools/xpack-riscv-none-embed-gcc-10.2.0-1.1/bin
+ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-elf/bin
 
 # Add qemu command search path
 ENV PATH=$PATH:/workspace/projects/qemu/build:$PATH
