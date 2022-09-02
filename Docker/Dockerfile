@@ -131,6 +131,14 @@ ENV PATH=$PATH:/workspace/projects/qemu/build:$PATH
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
 RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 
+RUN cd /usr \
+    && wget -q ${RISCV_GNU_ELF_TOOLCHAIN_URL} -O riscv32-elf.tar.gz \
+    && tar zxvf riscv32-elf.tar.gz >> /dev/null \
+    && mv riscv riscv32-gnu-elf \
+    && rm riscv32-elf.tar.gz
+ENV PATH="$PATH:/usr/riscv32-gnu-elf/bin"
+
+
 RUN cp /Docker/start.sh /usr/local/bin/ && chmod 755 /usr/local/bin/start.sh
 USER $NAME
 RUN echo eval /usr/local/bin/start.sh > ~/.bashrc 

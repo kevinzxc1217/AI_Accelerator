@@ -33,13 +33,5 @@ if [[ ! -d /workspace/projects/qemu ]]; then
     git clone --depth=1 https://git.qemu.org/git/qemu.git /workspace/projects/qemu
 fi
 
-if [[ ! -d /workspace/projects/riscv32-tools ]]; then
-    echo setup riscv32-tools .....
-    mkdir -p /workspace/projects/riscv32-tools
-    wget --no-check-certificate https://osp.computing.ncku.edu.tw:8001/share.cgi?ssid=e7b5fa10dc1f4e87aa89082ce4da6bb4&fid=e7b5fa10dc1f4e87aa89082ce4da6bb4&path=%2F&filename=riscv32-elf-ubuntu-20.04-nightly-2022.03.09-nightly.tar.gz&openfolder=forcedownload&ep= -O riscv32-elf.tar.gz -P /workspace/projects/riscv32-tools/
-    tar zxvf /workspace/projects/riscv32-tools/riscv32-elf.tar.gz -C /workspace/projects/riscv32-tools/
-    rm /workspace/projects/riscv32-tools/riscv32-elf.tar.gz
-fi
-
 welcome_message
 echo aias fall 2022 workspace is created.
