@@ -9,5 +9,3 @@ COURSE=aias
 # project parameters, must be consistent with gitlab URLs
 COURSE_GITLAB="aias_fall_2022"
 
-# normal project list
-PROJECT="playlab-chisel-template"
