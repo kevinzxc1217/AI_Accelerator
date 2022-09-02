@@ -1,0 +1,7 @@
+projects/
+www/
+Docker/env_setup.sh
+temp
+.DS_Store
+.env
+.vscode
