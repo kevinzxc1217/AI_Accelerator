@@ -51,7 +51,7 @@ NGINX_PORT=8080
 RUN_FLASK=true
 
 # project parameters, must be consistent with gitlab URLs
-COURSE_GITLAB="aica-fall-2022"
+COURSE_GITLAB="aica-spring-2020"
 
 # normal project list
 PROJECT="aica_lab4"
@@ -72,12 +72,8 @@ PROJECT="aica_lab4"
     ```bash
     $ pip list
     ```
-    ````
 
 
 ## 一般環境
-- 在 [環境設定參數](#環境設定參數) 內設定 `RUN_FLASK=false`
 - 宿主機 `./projects` 掛載於 `/workspace/projects`
-- 可在 bash 使用 `ngrok` 直接呼叫預裝載的 ngrok
-- 透過 `PORT_MAPPING` 指定宿主機與 container 相互映射的 port，並可透過分隔符號 `,` 同時指定多組映射
 - 關閉 bash window 後 container 將會立即關閉
