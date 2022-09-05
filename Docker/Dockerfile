@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ADD . /Docker
 
@@ -10,26 +10,40 @@ ARG UID=1000
 ARG GID=1000
 ARG NAME=base
 
-RUN apt-get update -y 
+ENV INSTALLATION_TOOLS apt-utils \
+    curl \
+    software-properties-common
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils python3.6 python3-pip vim git nano dos2unix wget curl sudo locales openjdk-8-jre-headless
+ENV TOOL_PACKAGES dos2unix \
+    git \
+    nano \
+    vim \
+    tree \
 
-#Install SBT
+RUN apt-get -qq update && \
+    apt-get -qq install ${INSTALLATION_TOOLS} && \
+    add-apt-repository ppa:git-core/ppa && \
+    apt-get -qq update && \
+    apt-get -qq upgrade && \
+    apt-get -qq install {TOOL_PACKAGES}
+
+# install sbt
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list
 RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add 2> /dev/null
 
-RUN apt-get update -y 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-8-jdk sbt 
+# install jdk
+RUN apt-get update -qq
+RUN apt-get install -qq openjdk-8-jdk sbt
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
-#Install verilator
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y verilator gdb cgdb valgrind
-RUN unset VERILATOR_ROOT
+#Install verilator and its requirements
+RUN apt-get install -qq perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc
+RUN apt-get install -qq verilator gdb cgdb valgrind
 
-# Update pip3
-RUN DEBIAN_FRONTEND=noninteractive pip3 install --upgrade pip
+# install mill
+ENV MILL_VERSION 0.10.0-M5
+RUN wget -q "https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5" -O /usr/local/bin/mill && chmod +x /usr/local/bin/mill
 
 # Change time zone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
