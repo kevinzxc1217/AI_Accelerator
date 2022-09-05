@@ -20,6 +20,7 @@ ENV TOOL_PACKAGES dos2unix \
     vim \
     tree \
 
+# install essential tools and packages
 RUN apt-get -qq update && \
     apt-get -qq install ${INSTALLATION_TOOLS} && \
     add-apt-repository ppa:git-core/ppa && \
@@ -32,18 +33,18 @@ RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/ap
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list
 RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add 2> /dev/null
 
-# install jdk
+# install mill
+ARG MILL_VERSION 0.10.0-M5
+RUN wget -q "https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5" -O /usr/local/bin/mill && chmod +x /usr/local/bin/mill
+
+# install JAVA and set $JAVA_HOME
 RUN apt-get update -qq
 RUN apt-get install -qq openjdk-8-jdk sbt
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
-#Install verilator and its requirements
+# install verilator and its requirements
 RUN apt-get install -qq perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc
 RUN apt-get install -qq verilator gdb cgdb valgrind
-
-# install mill
-ENV MILL_VERSION 0.10.0-M5
-RUN wget -q "https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5" -O /usr/local/bin/mill && chmod +x /usr/local/bin/mill
 
 # Change time zone
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
@@ -69,12 +70,8 @@ RUN chown -R $NAME:$NAME /Docker
 # Install required python modules
 RUN pip3 install -r /Docker/requirements.txt
 
-ENV MILL_VERSION 0.10.0-M5
-
-RUN curl -L https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5 > /usr/local/bin/mill && chmod +x /usr/local/bin/mill
-
 # Add qeumu environment
-ENV QEMU_PACKAGES build-essential \
+ARG QEMU_PACKAGES build-essential \
         ccache \
         chrpath \
         clang \
@@ -133,18 +130,16 @@ ENV QEMU_PACKAGES build-essential \
         xfslibs-dev \
         libsdl2-dev 
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install $QEMU_PACKAGES
+RUN apt-get install -qq ${QEMU_PACKAGES}
 
-# Add toolchain search path
+# Add risc-v gnu toolchain search path
 ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-elf/bin
 
-# Add qemu command search path
+# Add qemu search path
 ENV PATH=$PATH:/workspace/projects/qemu/build:$PATH
 
-# Convert .sh files from CRLF to LF
-RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
-RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
-
+# install RISC-V GNU ELF Toolchain
+ARG RISCV_GNU_ELF_TOOLCHAIN_URL="https://osp.computing.ncku.edu.tw:8001/share.cgi?ssid=e7b5fa10dc1f4e87aa89082ce4da6bb4&fid=e7b5fa10dc1f4e87aa89082ce4da6bb4&path=%2F&filename=riscv32-elf-ubuntu-20.04-nightly-2022.03.09-nightly.tar.gz&openfolder=forcedownload&ep="
 RUN cd /usr \
     && wget -q ${RISCV_GNU_ELF_TOOLCHAIN_URL} -O riscv32-elf.tar.gz \
     && tar zxvf riscv32-elf.tar.gz >> /dev/null \
@@ -152,10 +147,14 @@ RUN cd /usr \
     && rm riscv32-elf.tar.gz
 ENV PATH="$PATH:/usr/riscv32-gnu-elf/bin"
 
+# Convert .sh files from CRLF to LF
+RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
+RUN dos2unix -ic /Docker/env_setup.sh | xargs dos2unix
 
 RUN cp /Docker/start.sh /usr/local/bin/ && chmod 755 /usr/local/bin/start.sh
 USER $NAME
 RUN echo eval /usr/local/bin/start.sh > ~/.bashrc 
 RUN echo "export PS1=\"\[\e[0;31m\]\u@\[\e[m\e[0;34m\]\h\[\e[m \e[0;32m\] \w[\!]\$\[\e[m\]  \"" >> ~/.bashrc
 
+# run bash
 CMD ["/bin/bash"]
