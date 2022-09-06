@@ -38,7 +38,7 @@ RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sourc
 RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add 2> /dev/null
 
 # install mill
-ARG MILL_VERSION 0.10.0-M5
+ENV MILL_VERSION 0.10.0-M5
 RUN wget -q "https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.10.0-M5" -O /usr/local/bin/mill && chmod +x /usr/local/bin/mill
 
 # install JAVA and set $JAVA_HOME
@@ -75,7 +75,7 @@ RUN chown -R $NAME:$NAME /Docker
 RUN pip3 install -r /Docker/requirements.txt
 
 # Add qeumu environment
-ARG QEMU_PACKAGES build-essential \
+ENV QEMU_PACKAGES build-essential \
         ccache \
         chrpath \
         clang \
@@ -134,7 +134,7 @@ ARG QEMU_PACKAGES build-essential \
         xfslibs-dev \
         libsdl2-dev 
 
-RUN apt-get install -yqq ${QEMU_PACKAGES}
+RUN apt-get install ${QEMU_PACKAGES} -yqq
 
 # Add risc-v gnu toolchain search path
 ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-elf/bin
