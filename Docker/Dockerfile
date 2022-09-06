@@ -11,7 +11,9 @@ ARG GID=1000
 ARG NAME=base
 
 ENV INSTALLATION_TOOLS apt-utils \
+    sudo \
     curl \
+    wget \
     software-properties-common
 
 ENV TOOL_PACKAGES dos2unix \
@@ -19,14 +21,16 @@ ENV TOOL_PACKAGES dos2unix \
     nano \
     vim \
     tree \
+    locales \
+    python3-pip 
 
 # install essential tools and packages
-RUN apt-get -qq update && \
-    apt-get -qq install ${INSTALLATION_TOOLS} && \
+RUN apt-get update -qq && \
+    apt-get install ${INSTALLATION_TOOLS} -yqq && \
     add-apt-repository ppa:git-core/ppa && \
-    apt-get -qq update && \
-    apt-get -qq upgrade && \
-    apt-get -qq install {TOOL_PACKAGES}
+    apt-get update -qq && \
+    apt-get upgrade -yqq && \
+    apt-get install ${TOOL_PACKAGES} -yqq
 
 # install sbt
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
@@ -39,15 +43,15 @@ RUN wget -q "https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.1
 
 # install JAVA and set $JAVA_HOME
 RUN apt-get update -qq
-RUN apt-get install -qq openjdk-8-jdk sbt
+RUN apt-get install openjdk-8-jdk sbt -yqq
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
 # install verilator and its requirements
-RUN apt-get install -qq perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc
-RUN apt-get install -qq verilator gdb cgdb valgrind
+RUN apt-get install perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc -yqq
+RUN apt-get install verilator gdb cgdb valgrind -yqq
 
 # Change time zone
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+RUN apt-get install -yqq --no-install-recommends tzdata
 RUN TZ=Asia/Taipei \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
@@ -130,7 +134,7 @@ ARG QEMU_PACKAGES build-essential \
         xfslibs-dev \
         libsdl2-dev 
 
-RUN apt-get install -qq ${QEMU_PACKAGES}
+RUN apt-get install -yqq ${QEMU_PACKAGES}
 
 # Add risc-v gnu toolchain search path
 ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-elf/bin
