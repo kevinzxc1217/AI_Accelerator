@@ -10,19 +10,25 @@ ARG UID=1000
 ARG GID=1000
 ARG NAME=base
 
-ENV INSTALLATION_TOOLS apt-utils \
+ARG INSTALLATION_TOOLS apt-utils \
     sudo \
     curl \
     wget \
     software-properties-common
 
-ENV TOOL_PACKAGES dos2unix \
+ARG TOOL_PACKAGES dos2unix \
     git \
     nano \
     vim \
     tree \
     locales \
-    python3-pip 
+    python3-pip \
+    make \
+    build-essential \
+    valgrind \
+    gdb \
+    verilator \
+    qemu-system-riscv32
 
 # install essential tools and packages
 RUN apt-get update -qq && \
@@ -45,10 +51,6 @@ RUN wget -q "https://github.com/com-lihaoyi/mill/releases/download/0.10.0-M5/0.1
 RUN apt-get update -qq
 RUN apt-get install openjdk-8-jdk sbt -yqq
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
-
-# install verilator and its requirements
-RUN apt-get install perl autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc -yqq
-RUN apt-get install verilator gdb cgdb valgrind -yqq
 
 # Change time zone
 RUN apt-get install -yqq --no-install-recommends tzdata
@@ -74,82 +76,35 @@ RUN chown -R $NAME:$NAME /Docker
 # Install required python modules
 RUN pip3 install -r /Docker/requirements.txt
 
-# Add qeumu environment
-ENV QEMU_PACKAGES build-essential \
-        ccache \
-        chrpath \
-        clang \
-        cpio \
-        diffstat \
-        gawk \
-        gettext \
-        git \
-        git-core \
-        glusterfs-common \
-        libaio-dev \
-        libattr1-dev \
-        libbrlapi-dev \
-        libbz2-dev \
-        libcacard-dev \
-        libcap-ng-dev \
-        libcurl4-gnutls-dev \
-        libdrm-dev \
-        libepoxy-dev \
-        libfdt-dev \
-        libgbm-dev \
-        libibverbs-dev \
-        libiscsi-dev \
-        libjemalloc-dev \
-        libjpeg-turbo8-dev \
-        liblzo2-dev \
-        libncursesw5-dev \
-        libnfs-dev \
-        libnss3-dev \
-        libnuma-dev \
-        libpixman-1-dev \
-        librados-dev \
-        librbd-dev \
-        librdmacm-dev \
-        libsasl2-dev \
-        libseccomp-dev \
-        libsnappy-dev \
-        libspice-protocol-dev \
-        libspice-server-dev \
-        libssh-dev \
-        libssl-dev \
-        libusb-1.0-0-dev \
-        libusbredirhost-dev \
-        libvdeplug-dev \
-        libvte-2.91-dev \
-        libzstd-dev \
-        locales \
-        make \
-        ninja-build \
-        python3-yaml \
-        python3-sphinx \
-        python3-sphinx-rtd-theme \
-        samba \
-        sparse \
-        texinfo \
-        xfslibs-dev \
-        libsdl2-dev 
+# set install path of tools about risc-v
+ENV RISCV=/opt/riscv
 
-RUN apt-get install ${QEMU_PACKAGES} -yqq
+# install sifive elf2hex (Verilog/Chisel friendly hex file generator)
+ARG SIFIVE_ELF2HEX_URL=https://github.com/sifive/elf2hex/releases/download/v1.0.1/elf2hex-1.0.1.tar.gz
+RUN mkdir -p ${RISCV} && cd ${RISCV} && \
+    wget -q ${SIFIVE_ELF2HEX_URL} && \
+    tar -xvzpf elf2hex-1.0.1.tar.gz >> /dev/null && \
+    cd elf2hex-1.0.1 && \
+    ./configure --target=riscv64-unknown-elf && \
+    make && \
+    make install && \
+    cd .. && rm -rf elf2hex-1.0.1.tar.gz elf2hex-1.0.1
 
-# Add risc-v gnu toolchain search path
-ENV PATH=$PATH:/workspace/projects/riscv32-tools/riscv32-elf/bin
-
-# Add qemu search path
-ENV PATH=$PATH:/workspace/projects/qemu/build:$PATH
-
-# install RISC-V GNU ELF Toolchain
-ARG RISCV_GNU_ELF_TOOLCHAIN_URL="https://osp.computing.ncku.edu.tw:8001/share.cgi?ssid=e7b5fa10dc1f4e87aa89082ce4da6bb4&fid=e7b5fa10dc1f4e87aa89082ce4da6bb4&path=%2F&filename=riscv32-elf-ubuntu-20.04-nightly-2022.03.09-nightly.tar.gz&openfolder=forcedownload&ep="
-RUN cd /usr \
-    && wget -q ${RISCV_GNU_ELF_TOOLCHAIN_URL} -O riscv32-elf.tar.gz \
-    && tar zxvf riscv32-elf.tar.gz >> /dev/null \
-    && mv riscv riscv32-gnu-elf \
-    && rm riscv32-elf.tar.gz
-ENV PATH="$PATH:/usr/riscv32-gnu-elf/bin"
+# install RISC-V GNU Toolchain (x86_64 or Arm64 according to ARCH)
+ARG RISCV_GNU_TOOLCHAIN_URL_X86_64="https://playlab.computing.ncku.edu.tw/downloads/riscv-gnu-toolchain/riscv64-elf-Linux-x86_64-65056bd.tar.gz"
+ARG RISCV_GNU_TOOLCHAIN_URL_ARM64="https://playlab.computing.ncku.edu.tw/downloads/riscv-gnu-toolchain/riscv64-elf-Linux-aarch64-65056bd.tar.gz"
+ARG ARCH
+RUN cd $RISCV && \
+    mkdir riscv-gnu-toolchain && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        wget -q $RISCV_GNU_TOOLCHAIN_URL_X86_64 -O riscv-gnu-toolchain.tar.gz; \
+    else \
+        wget -q $RISCV_GNU_TOOLCHAIN_URL_ARM64 -O riscv-gnu-toolchain.tar.gz; \
+    fi && \
+    tar zxvf riscv-gnu-toolchain.tar.gz -C riscv-gnu-toolchain --strip-components 1 >> /dev/null && \
+    rm -rf riscv-gnu-toolchain.tar.gz
+# add RISC-V GNU Toolchain to system search path
+ENV PATH=$PATH:$RISCV/riscv-gnu-toolchain/bin
 
 # Convert .sh files from CRLF to LF
 RUN dos2unix -ic /Docker/start.sh | xargs dos2unix
