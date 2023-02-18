@@ -10,13 +10,13 @@ ARG UID=1000
 ARG GID=1000
 ARG NAME=base
 
-ARG INSTALLATION_TOOLS apt-utils \
+ENV INSTALLATION_TOOLS apt-utils \
     sudo \
     curl \
     wget \
     software-properties-common
 
-ARG TOOL_PACKAGES dos2unix \
+ENV TOOL_PACKAGES dos2unix \
     git \
     nano \
     vim \
