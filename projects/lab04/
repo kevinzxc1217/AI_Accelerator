@@ -1,0 +1,24 @@
+insert kevin1217 code
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch kevin1217
+# Changes to be committed:
+#	modified:   Makefile
+#	modified:   README.md
+#	modified:   linenoise.hpp
+#	modified:   obj/emulator
+#	modified:   ../HW4-2/Makefile
+#	modified:   ../HW4-2/README.md
+#	modified:   ../HW4-2/emulator.cpp
+#	modified:   ../HW4-2/linenoise.hpp
+#	modified:   ../HW4-2/obj/emulator
+#	modified:   ../Lab4-1/emulator.cpp
+#	modified:   ../Lab4-1/obj/emulator
+#
+# Untracked files:
+#	test.txt
+#	../HW4-2/test_SEXTb.txt
+#	../HW4-2/test_assembly/
+#	../lab4-group/
+#

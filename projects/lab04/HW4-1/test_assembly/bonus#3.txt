@@ -1,0 +1,25 @@
+lui     x28, 255
+addi    x28, x28, 2047
+addi    x28, x28, 2047
+lui     x29, 255
+addi    x29, x29, 2047
+addi    x29, x29, 2047
+mulhu   x30, x28, x29
+mul     x29, x28, x29
+mulhsu  x30, x30, x29
+lui     x29, 255
+addi    x29, x29, 2047
+addi    x29, x29, 2047
+mulhu   x30, x28, x29
+mulhsu  x29, x28, x29
+rem     x30, x28, x29
+remu    x29, x28, x30
+lui     x28, 255
+addi    x28, x28, 2047
+addi    x28, x28, 2047
+mulhu   x30, x28, x29
+mulhsu  x29, x28, x29
+mulhsu  x30, x30, x29
+rem     x30, x28, x29
+remu    x29, x28, x30
+hcf

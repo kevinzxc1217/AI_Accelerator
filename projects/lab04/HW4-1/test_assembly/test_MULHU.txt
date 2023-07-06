@@ -1,0 +1,6 @@
+## RV32 Emulator Testing Assembly Code for MULHU function
+main:
+addi x28,x0 ,-1
+addi x29,x0 ,-1
+mulhu  x30,x28,x29
+hcf

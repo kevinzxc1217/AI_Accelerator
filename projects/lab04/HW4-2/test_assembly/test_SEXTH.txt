@@ -1,0 +1,4 @@
+main:
+li x28,32768
+sext.h x30,x28
+hcf
