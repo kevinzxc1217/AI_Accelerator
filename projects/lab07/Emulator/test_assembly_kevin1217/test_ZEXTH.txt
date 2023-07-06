@@ -1,0 +1,4 @@
+main:
+li x28,120000
+zext.h x30,x28
+hcf

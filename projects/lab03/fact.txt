@@ -1,0 +1,44 @@
+#int fact(int n){
+#	if(n==1) return 1;
+#	return fact(n-1)*n;
+#	}
+
+main:
+    li     a0, 2              # 暫存器 a0 儲存 n 值，這邊設定 n=2
+    jal    fact               # 開始進行 factorial 運算
+    j      exit
+fact:
+	#呼叫函式後，先sw
+    addi   sp, sp, -8         # 進行 stack pointer 的移動
+    sw     ra, 0(sp)          # 儲存 return address
+    sw     a0, 4(sp)          # 儲存 temp data
+    
+	#設置終止條件
+    #if(n==1) return 1;
+    li     t0, 1              
+    beq    a0, t0, ret_one    # 檢查是否運算到 n=1
+    
+    #遞迴
+	#fact(n-1)
+    addi   a0, a0, -1         # 確認目前之n 沒有 = 1 則繼續 call function
+    jal    fact       
+    
+    #遞迴到底後，從stack底部開始取出
+    #fact(n-1)*n，t0=上一層的值，a1=return值
+    lw     t0, 4(sp)          
+    mul    a1, t0, a1
+    j      done
+
+ret_one:
+	#不用最後一次存的1，直接刪除stack後ra
+    li     a1, 1
+	j	   done
+
+#完成呼叫後return，消除stack
+done:
+    lw     ra, 0(sp)
+    addi   sp, sp, 8 
+    jr     ra     
+    
+exit:
+    ecall                    # Terminate

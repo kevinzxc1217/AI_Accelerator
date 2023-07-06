@@ -1,0 +1,73 @@
+
+fibonacci_asm:
+
+prologue:
+    addi sp,sp,-16
+    sw     ra, 0(sp)
+    sw     s0, 4(sp)          
+    sw     s1, 8(sp)           
+    sw     s2, 12(sp)          # 儲存 n
+    sw     s3, 16(sp)          # 儲存 ans
+
+    li     s0,0
+    li     s1,1
+    
+    li     a0,2              
+    li     s3,0
+    mv     s2,a0
+    jal    loop_start               # 開始進行 factorial 運算
+    j      epilogue
+    
+loop_start:
+    addi   sp, sp, -8        # 進行 stack pointer 的移動
+    sw     ra, 0(sp)          # 儲存 return address
+    sw     s2, 4(sp)          # 儲存 n
+    
+    mv     t3, s2
+    li     t0, 0              
+    li     t1, 1             
+    beq    t3, t0, ret_zero   # if(n==0)return 0
+    beq    t3, t1, ret_one    # if(n==1)return 1       		 
+
+    addi   t3, t3, -1         # f(n-1)
+    mv     s2,t3
+    jal    loop_start       		  
+    
+    lw     t3, 4(sp)          # 逐一取出
+    addi   t3, t3, -2         # f(n-2)
+    mv     s2,t3
+    jal    loop_start       	
+    #最後
+    lw     ra, 0(sp)         #取出後，將block清掉
+    addi   sp, sp, 8 
+    jr     ra     
+loop_end:
+	mv    a0, s3
+    
+epilogue:
+    addi a0,x0 ,1
+    ecall
+    lw     ra,0(sp)   
+    lw     s0,4(sp)
+    lw     s1,8(sp)
+    lw     s2,12(sp) 
+    lw     s2,16(sp) 
+    lw   ra,0(sp)
+    addi sp,sp,16
+    jr ra
+    
+ret_one:  
+    mv     t1,a1
+    add    a1, s1, t1 		
+
+    lw     ra, 0(sp)         #取出ra地址
+    addi   sp, sp, 8     
+    jr     ra
+    
+ret_zero:    
+    mv     t0,a1
+    add    a1, s0, t0 		
+
+    lw     ra, 0(sp)         #取出ra地址
+    addi   sp, sp, 8     
+    jr     ra

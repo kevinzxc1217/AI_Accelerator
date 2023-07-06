@@ -1,0 +1,9 @@
+.bsp/
+generated/
+out/
+obj/
+project/
+target/
+test_run_dir/
+top_entry
+asm

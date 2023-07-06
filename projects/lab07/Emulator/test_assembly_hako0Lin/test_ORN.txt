@@ -1,0 +1,15 @@
+## test ORN
+main:
+# expecting 0xffff fffe at x30
+li x28, 10
+li x29, 11
+orn x30, x28, x29
+# expecting 0xffff ffff at x30
+li x28, 1
+li x29, 0
+orn x30, x28, x29
+# expecting 0x0000 0800 at x30
+li x28, 2048
+li x29, -1
+orn x30, x28, x29
+hcf

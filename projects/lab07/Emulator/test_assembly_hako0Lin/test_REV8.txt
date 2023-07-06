@@ -1,0 +1,13 @@
+## test REV8
+main:
+# expecting 0xffff ffff at x29
+li x28, 0x2f
+slli x28, x28, 16
+addi x28, x28, 0x1d 
+rev8 x29, x28
+# expecting 0xab07 effc at x29
+addi x28, x0, 0xcef
+slli x28, x28, 16
+addi x28, x28, 0x7ab 
+rev8 x29, x28
+hcf

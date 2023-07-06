@@ -1,0 +1,243 @@
+# sudoku_2x2_asm.S
+   
+    .text                           # code section 
+    .global sudoku_2x2_asm          # declare the asm function as a global function
+    .type sudoku_2x2_asm, @function # define sum_asm as a function 
+sudoku_2x2_asm:
+
+sudoku_2x2_c:
+	addi	sp,sp,-4 #原始addr
+    sw		ra,0(sp)
+
+    addi   sp,sp,-40
+    sw     s0,0(sp) 
+    sw     s1,4(sp)
+    sw     s2,8(sp)
+    sw     s3,12(sp) 
+    sw     s4,16(sp)
+    sw     s5,20(sp)
+    sw     s6,24(sp) 
+    sw     s7,28(sp)
+    sw     s8,32(sp)
+
+
+    li 		a1,0	#a1:index
+	jal		solve
+end:
+    lw     s8,0(sp)
+    lw     s7,0(sp)   
+    lw     s6,4(sp)
+    lw     s5,8(sp)
+    lw     s4,12(sp) 
+    lw     s3,0(sp)
+    lw     s2,0(sp)   
+    lw     s1,4(sp)
+    lw     s0,8(sp)
+    addi    sp,sp,40
+    lw     ra,0(sp)
+    addi    sp,sp,4
+    jr      ra
+
+solve:
+    #a0:set     a1:index
+	addi	sp,sp,-8
+    sw		ra,0(sp)
+    sw		a1,4(sp)
+    ## if (index >= 16) return 1;                            
+	li		t0,16
+	bge		a1,t0,ret_one
+
+
+    ##if (set[index] > 0) return solve(index + 1, set); 
+    #t2:set[index]
+    add		t2,a0,a1
+    lb		t2,0(t2)
+    beq	    t2,x0,solve_else
+    #return solve(index + 1, set)
+    addi    a1,a1,1
+    jal     solve
+    #j       done
+
+
+solve_else:
+
+    #t0:n   t1:max
+    li      t0,1
+    li      t1,4
+    #for (int n = 1; n <= 4; n++)
+solve_for:    
+    #set[index] = n; 
+    #t2:set[index]
+    add		t2,a0,a1
+    sb		t0,0(t2)
+
+    ##if (check(index,set) && solve(index + 1,set))
+    #a1:index
+    jal     check
+    #s8:check_return
+    beq     s8,x0,n_index
+  
+    #check回傳true的話，去solve
+
+    #solve(index + 1,set)
+    #beq     s7,x0,prev
+
+    addi    a1,a1,1
+    jal     solve
+    #check()&solve()
+    #s7:solve_return
+    and     s8,s7,s7
+    #若function的兩個值皆為1，則return 1
+    bne     s8,x0,ret_one
+    j       ret_zero
+    #若solve return 0，則回到上個index
+    #j       return_prev
+
+
+prev:
+    addi    a1,a1,1
+    jal     solve
+    lw      a1,4(sp)
+    add		t2,a0,a1
+    lb		t0,0(t2)
+    #li      t0,9
+    #sb      t0,0(t2)
+
+    #j       n_index
+    
+    #若solve return 0，則回到上個index
+    j       return_prev
+
+
+
+return_prev:
+    
+    lw      ra,0(sp)
+    addi    sp,sp,8
+    jr      ra
+
+n_index:
+    #n++    t1:max
+    addi    t0,t0,1
+    ble     t0,t1,solve_for
+    #n超出範圍且找不到值，將set[index]=0
+    #返回上個index
+    add		t2,a0,a1
+    sb		x0,0(t2)
+    li      s7,0
+    j      ret_zero
+#    j      return_prev
+
+row:
+    #a1:index   a0:set
+    #s0:row_num     s1:4
+
+    #int row_num = (index / 4) * 4;
+    srl    s0,a1,2
+    sll    s0,s0,2
+    #i:s0
+    #s4:row_num + 4
+    addi    s4,s0,4
+
+row_loop:
+    #for (int i = col_num ; i < col_num +12; i = i + 4)
+    #i < col_num +12;
+    bgt     s0,s4,ret_1
+    ##if (i != index)
+    beq     s0,a1,i_index4
+    #s5:set[index]
+    add     s5,a1,a0
+    lb      s5,0(s5)
+    #s6:set[i]
+    add     s6,s0,a0
+    lb      s6,0(s6)
+    ##if (set[index] == set[i])
+    beq     s5,s6,ret_0
+    #i = i + 4
+    j       i_index4
+
+
+
+col:
+    #a1:index   a0:set
+    #s0:col_num     s1:4
+
+    #int col_num = index % 4;  
+    srl    s0,a1,2
+    sll    s0,s0,2
+    sub     s0,a1,s0
+    #i:s0
+    #s4:col_num +12
+    addi    s4,s0,12
+
+col_loop:
+    #for (int i = col_num ; i < col_num +12; i = i + 4)
+    #i < col_num +12;
+    bgt     s0,s4,ret_1
+    ##if (i != index)
+    beq     s0,a1,i_index1
+    #s5:set[index]
+    add     s5,a1,a0
+    lb      s5,0(s5)
+    #s6:set[i]
+    add     s6,s0,a0
+    lb      s6,0(s6)
+    ##if (set[index] == set[i])
+    beq     s5,s6,ret_0
+    #i = i + 4
+    j       i_index1
+
+i_index4:
+    addi    s0,s0,1
+    j       row_loop
+
+i_index1:
+    addi    s0,s0,4
+    j       col_loop
+
+check:
+    addi    sp,sp,-8
+    sw      ra,0(sp)
+    sw      a1,4(sp)
+    #j       ret_one
+    #jal      row
+    #beq      s8,x0,ret_zero
+    jal      col
+    beq      s8,x0,ret_zero
+    #jal      row
+    #beq      s8,x0,ret_zero
+    #mv       s2,s8
+    #jal      row
+    #beq      s8,x0,ret_zero
+    #and      s8,s2,s8
+
+    #跳回solve
+    lw       ra,0(sp)
+    addi     sp,sp,8
+    jr       ra
+
+
+ret_1:
+    #跳回check
+    li      s8,1
+    jr      ra
+
+ret_0:
+    #跳回check
+    li      s8,0
+    jr      ra
+
+ret_one:
+	li		s8,1
+    j done
+
+ret_zero:
+	li		s8,0
+    j done
+    
+done:
+    lw		ra,0(sp)
+    addi	sp,sp,8
+    jr		ra
+
+    .size sudoku_2x2_asm, .-sudoku_2x2_asm

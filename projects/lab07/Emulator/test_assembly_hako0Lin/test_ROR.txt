@@ -1,0 +1,15 @@
+## test ROR
+main:
+# expecting 0xe5e0 63a0 at x30
+li x28, 0x72f
+slli x28, x28, 16
+addi x28, x28, 0x31d 
+addi x29, x0, 5
+ror x30, x28, x29
+# expecting 0xbd01 230a at x30
+li x28, 0xabd
+slli x28, x28, 16
+addi x28, x28, 0x123 
+addi x29, x0, 8
+ror x30, x28, x29
+hcf

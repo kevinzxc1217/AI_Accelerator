@@ -1,0 +1,13 @@
+## test RORI
+main:
+# expecting 0xe839 7818 at x30
+li x28, 0x72f
+slli x28, x28, 16
+addi x28, x28, 0x31d 
+rori x30, x28, 5
+# expecting 0x230a bd01 at x30
+li x28, 0xabd
+slli x28, x28, 16
+addi x28, x28, 0x123 
+rori x30, x28, 8
+hcf

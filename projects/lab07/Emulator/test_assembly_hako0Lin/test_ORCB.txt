@@ -1,0 +1,17 @@
+## test ORCB
+main:
+# expecting 0xffff at x29
+li x28, 0x1ff
+li x29, 0x1
+orc.b x29, x28
+# expecting 0xffff0000 at x29
+li x28, 0x1ff
+slli x28, x28, 16 
+li x29, 0x51
+orc.b x29, x28
+# expecting 0x00ff0000 at x29
+li x28, 0x3f
+slli x28, x28, 16 
+li x29, 0xa1
+orc.b x29, x28
+hcf

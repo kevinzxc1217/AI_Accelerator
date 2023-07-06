@@ -1,0 +1,27 @@
+example1:
+riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -nostartfiles -Tvirt.lds boot.S example_1_main.c example_1_sum.S -o example_1
+qemu-system-riscv32 -nographic -machine virt -bios none -kernel example_1
+qemu-system-riscv32 -nographic -machine virt -bios none -kernel example_1 -d in_asm
+riscv64-unknown-elf-objdump -d example_1
+
+example2:
+riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -nostartfiles -Tvirt.lds boot.S example_2_main.c example_2_sum.S -o example_2
+qemu-system-riscv32 -nographic -machine virt -bios none -kernel example_2
+qemu-system-riscv32 -nographic -machine virt -bios none -kernel example_2 -d in_asm
+
+fib:
+riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -nostartfiles -Tvirt.lds boot.S fibonacci.c fibonacci.S -o fibonacci
+qemu-system-riscv32 -nographic -machine virt -bios none -kernel fibonacci
+
+
+sudo:
+riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -nostartfiles -Tvirt.lds boot.S main.c sudoku_2x2_c.c sudoku_2x2_c.h sudoku_2x2_asm.S -o sudoku_2x2
+qemu-system-riscv32 -nographic -machine virt -bios none -kernel sudoku_2x2
+riscv64-unknown-elf-objdump -d sudoku_2x2
+
+
+
+
+debug:
+qemu-system-riscv32 -nographic -machine virt -bios none -kernel fibonacci -d in_asm
+riscv64-unknown-elf-objdump -d fibonacci

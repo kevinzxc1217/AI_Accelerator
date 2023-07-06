@@ -1,0 +1,49 @@
+# sudoku_2x2_asm.S
+   
+    .text                           # code section 
+    .global sudoku_2x2_asm          # declare the asm function as a global function
+    .type sudoku_2x2_asm, @function # define sum_asm as a function 
+sudoku_2x2_asm:
+
+sudoku_2x2_c:
+	addi	sp,sp,-4 #原始addr
+    sw		ra,0(sp)
+    li 		a1,0	#a1:index
+	jal		solve
+end:
+    lw      ra,0(sp)
+    addi    sp,sp,4
+    jr      ra
+solve:
+    #a0:set     t6/a1:index
+	addi	sp,sp,-8
+    sw		ra,0(sp)
+    sw		a1,4(sp)
+    mv      t6,a1
+    ##if (index >= 16) 
+	li		t0,16
+	bge		t6,t0,ret_one
+    #t2:set[index]
+    add		t2,a0,t6
+    lw		t2,0(t2)
+    #set[index]>0
+    mv      a1,t6
+    bne		t2,x0,solve_index
+
+
+
+    addi	sp,sp,8
+    jr      ra
+
+solve_index:
+	addi	a1,a1,1
+    j		solve
+
+
+ret_one:
+	li		a1,1
+    lw		ra,0(sp)
+    addi	sp,sp,8
+    jr		ra
+
+    .size sudoku_2x2_asm, .-sudoku_2x2_asm

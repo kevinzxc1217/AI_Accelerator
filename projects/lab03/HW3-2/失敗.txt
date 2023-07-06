@@ -1,0 +1,48 @@
+prologue:
+	addi   sp, sp, -4        # 進行 stack pointer 的移動
+    sw     ra, 0(sp)          # 儲存 return address
+    
+    li     a0, 16              # 暫存器 a0 儲存 n 值，這邊設定 n=16
+    mv     t3,a0           		#t3=n
+    li     t4,0					#t4=ans
+    li     t1,1
+    li     t0,0
+    jal    loop_start               # 開始進行 factorial 運算
+    j      epilogue
+
+    
+loop_start:
+    addi   sp, sp, -8        # 進行 stack pointer 的移動
+    sw     ra, 0(sp)          # 儲存 return address
+    sw     t3, 4(sp)          # 儲存 temp data
+    beq    t3, t0, ret_zero   # if(n==0)return 0
+    beq    t3, t1, ret_one    # if(n==1)return 1       		 
+
+    addi   t3, t3, -1         # f(n-1)
+    jal    loop_start       		  
+    
+    lw     t3, 4(sp)          # 逐一取出
+    addi   t3, t3, -2         # f(n-2)
+    jal    loop_start       	
+  
+    lw     ra, 0(sp)         #取出後，將block清掉
+    addi   sp, sp, 8 
+    jr     ra   
+
+ret_one:
+    lw     ra, 0(sp)         #取出ra地址
+    addi   sp, sp, 8 
+    add    t4, t1, t4
+    jr     ra
+    
+ret_zero:
+    lw     ra, 0(sp)         #取出後，將block清掉
+    addi   sp, sp, 8 
+    add    t4, t0, t4 		
+    jr     ra   
+    
+epilogue:
+	mv   a0,t4
+    #addi a0,x0 ,1
+    ecall
+    #jr  ra

@@ -1,0 +1,96 @@
+-for迴圈:
+
+int k;
+for (k=0 ; source[k]!=0 ; k++) {
+	dest[k] = source[k];
+}
+
+for迴圈會在loop外面先宣告k=0，一進去再將k轉int，一圈結束時將k++
+注意，通常會在陣列最後一個數字放0當作for迴圈結尾
+
+main:
+    addi     t0, x0, 0     ## t0為和 base address的 offset
+    la       t1, source    ## t1為 source資料的 base address
+    la       t2, dest      ## t2為 dest資料的 base address
+loop:
+	#int k=0
+    slli     t3, t0, 2     ## 將 t0 shift因為一個 int資料大小為 4個 bytes，左移 2等同於乘以 4的動作 
+    add      t4, t1, t3    ## 將 base address + offset
+	#source[k]
+    lw       t5, 0(t4)     ## 取出記憶體中資料
+	#source[k]!=0
+    beq      t5, x0, exit  ## 取到 array結束 (結尾"0")
+    add      t6, t2, t3
+    sw       t5, 0(t6)     ## 存回 dest目標記憶體中
+	#k++
+    addi     t0, t0, 1     ## 還有資料需要處理，將 t0+1後繼續執行
+    jal      x0, loop
+#可接for迴圈後面code
+exit:
+    addi     a0, x0, 10
+    add      a1, x0, x0
+    ecall    #Terminate
+
+-calling convention遞迴:
+呼叫函式後，須將ra,temp,目前參數做sw，return時在lw，並銷毀stack
+標準作業:
+call_function:
+    addi   sp, sp, -8       #moving stack pointer from (sp) to (sp-8)
+    sw     ra, 0(sp)        #store "return address" into memory
+    sw     t0, 4(sp)        #store "temp data" into memory
+        
+return:
+    lw     t1, 4(sp)        #load "temp data"
+    lw     ra, 0(sp)        #load "return address"
+    addi   sp, sp, 8        #move stack pointer from (sp-8) to (sp)
+        
+    jr     ra               #jump back to return address
+	
+	
+	
+#int fact(int n){
+#	if(n==1) return 1;
+#	return fact(n-1)*n;
+#	}
+
+main:
+    li     a0, 2              # 暫存器 a0 儲存 n 值，這邊設定 n=2
+    jal    fact               # 開始進行 factorial 運算
+    j      exit
+fact:
+	#呼叫函式後，先sw
+    addi   sp, sp, -8         # 進行 stack pointer 的移動
+    sw     ra, 0(sp)          # 儲存 return address
+    sw     a0, 4(sp)          # 儲存 temp data
+    
+	#設置終止條件
+    #if(n==1) return 1;
+    li     t0, 1              
+    beq    a0, t0, ret_one    # 檢查是否運算到 n=1
+    
+    #遞迴
+	#return fact(n-1)
+    addi   a0, a0, -1         # 確認目前之n 沒有 = 1 則繼續 call function
+    jal    fact       
+    #遞迴到底後，從stack底部開始取出，後面接的是所需做的運算
+    #fact(n-1)*n，t0=上一層的值，a1=return值
+    lw     t0, 4(sp)          
+    mul    a1, t0, a1
+    j      done
+
+ret_one:
+	#不用最後一次存的1，直接刪除stack後ra
+    li     a1, 1
+	j	   done
+
+#完成呼叫後return，消除stack
+done:
+    lw     ra, 0(sp)
+    addi   sp, sp, 8 
+    jr     ra     
+    
+exit:
+    ecall  
+	
+	
+	

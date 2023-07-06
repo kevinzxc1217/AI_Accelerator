@@ -1,0 +1,5 @@
+main:
+li x28,3
+li x29,3
+CLMUL x30,x28,x29
+hcf
