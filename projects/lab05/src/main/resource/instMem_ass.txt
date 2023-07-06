@@ -1,0 +1,12 @@
+addi x2 x2 -1
+slli x0 x4 1
+add x1 x2 x1
+sub x1 x6 x1
+lb x1 x0 0
+lh x1 x0 1
+beq x1 x1 8
+blt x1 x2 4
+jal x0 12
+jalr x1 x6 9
+sb x1 x2 2
+sh x1 x2 4
