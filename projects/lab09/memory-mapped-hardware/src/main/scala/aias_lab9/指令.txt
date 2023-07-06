@@ -1,0 +1,4 @@
+mill chiselModule.test.runMain aias_lab9.AXILite.AXILiteXBarTest -tbn verilator
+mill chiselModule.test.runMain aias_lab9.ontop.topTest -tbn verilator
+mill chiselModule.test.runMain aias_lab9.Arbiter.arbiterTest -tbn verilator
+mill chiselModule.test.runMain aias_lab9.toptop.toptopTest -tbn verilator
